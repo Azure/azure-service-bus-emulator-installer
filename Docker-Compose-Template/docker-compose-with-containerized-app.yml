@@ -7,15 +7,15 @@ services:
       - "./Config.json:/ServiceBus-Emulator/ConfigFiles/Config.json"
     ports:
       - "5672:5672"
-    environment: 
-      SQL_SERVER: sqledge
-      MSSQL_SA_PASSWORD: ""  # Password should be same as what is set for SQL Edge  
+    environment:
+      SQL_SERVER: sqlserver
+      MSSQL_SA_PASSWORD: ""  # Password should be same as what is set for SQL Server
       ACCEPT_EULA: "N"
     depends_on:
-      - sqledge
-  sqledge:
-        container_name: "sqledge"
-        image: "mcr.microsoft.com/azure-sql-edge:latest"
+      - sqlserver
+  sqlserver:
+        container_name: "sqlserver"
+        image: "mcr.microsoft.com/mssql/server:latest"
         environment:
           ACCEPT_EULA: "N"
           MSSQL_SA_PASSWORD: "" # To be filled by user as per policy : https://learn.microsoft.com/en-us/sql/relational-databases/security/strong-passwords?view=sql-server-linux-ver16
