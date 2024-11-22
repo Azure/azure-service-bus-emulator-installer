@@ -17,21 +17,21 @@ This repository contains the scripts required to install and run the  [Azure Ser
 
 Azure Service Bus is a fully managed enterprise message broker offering queues and publish-subscribe topics. It decouples applications and services, providing benefits like load-balancing across workers, safe data and control routing, and reliable transactional coordination. Read more [here](https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-messaging-overview).
 
-## About Azure Service Bus emulator 
+## About Azure Service Bus emulator
 
 The Azure Service Bus emulator offers a local development experience for the Service bus service. You can use the emulator to develop and test code against the service in isolation, free from cloud interference.
 
 >[!CAUTION]
 >Emulator is intended solely for development and testing scenarios.Any kind of Production use is strictly discouraged. There is no official support provided for Emulator.
 > Any issues/suggestions should be reported via GitHub issues on [GitHub project](https://github.com/Azure/azure-service-bus-emulator-installer/issues).
-## Run Azure Service Bus Emulator 
+## Run Azure Service Bus Emulator
 
 This section summarizes the steps to develop and test locally with Service Bus Emulator. To read more about Service Bus, read [here](https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-messaging-overview).
 
 ## Prerequisites
 
-- Docker 
-  - [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/#:~:text=Install%20Docker%20Desktop%20on%20Windows%201%20Download%20the,on%20your%20choice%20of%20backend.%20...%20More%20items) 
+- Docker
+  - [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/#:~:text=Install%20Docker%20Desktop%20on%20Windows%201%20Download%20the,on%20your%20choice%20of%20backend.%20...%20More%20items)
 - Minimum hardware Requirements:
   - 2 GB RAM
   - 5 GB of Disk space
@@ -42,29 +42,29 @@ This section summarizes the steps to develop and test locally with Service Bus E
 >[!NOTE]
 >Before you continue with the subsequent steps, make sure Docker Engine is operational in the background.
 
-## Running the Emulator 
+## Running the Emulator
 
 This section highlights different steps to run Service Bus Emulator. Details are as follows:
 
 #### [Using Automated Script](#tab/automated-script)
 
 Before running automated script, clone the installation [repository](https://github.com/Azure/azure-service-bus-emulator-installer) locally.
- 
+
 ### Windows
-After completing the prerequisites, you can proceed with the following steps to run the Service Bus Emulator locally. 
+After completing the prerequisites, you can proceed with the following steps to run the Service Bus Emulator locally.
 
 1. Before executing the setup script, we need to allow execution of unsigned scripts. Run the below command in the PowerShell window:
 
 `$>Start-Process powershell -Verb RunAs -ArgumentList 'Set-ExecutionPolicy Bypass –Scope CurrentUser’`
 
-2. Execute setup script `LaunchEmulator.ps1`. Running the script would bring up two containers – Service Bus Emulator & Azure SQL Edge (dependency for Emulator)
+2. Execute setup script `LaunchEmulator.ps1`. Running the script would bring up two containers – Service Bus Emulator & SQL Server (dependency for Emulator)
 
 
 ### Linux & macOS
-After completing the prerequisites, you can proceed with the following steps to run the Service Bus Emulator locally. 
+After completing the prerequisites, you can proceed with the following steps to run the Service Bus Emulator locally.
 
 
-1. Execute the setup script `LaunchEmulator.sh` . Running the script would  bring up two containers – Service Bus Emulator & Azure SQL Edge (dependency for Emulator)
+1. Execute the setup script `LaunchEmulator.sh` . Running the script would  bring up two containers – Service Bus Emulator & SQL Server (dependency for Emulator)
 
 
 2. Execute the same script `LaunchEmulator.sh` with the option `--compose-down=Y` to issue a `docker compose down` to terminate the containers.
@@ -89,7 +89,7 @@ Once the steps are successful, Emulator compose set can be found running in Dock
 
 ## Interact with the emulator
 
-By default, emulator uses [config.json](https://github.com/Azure/azure-service-bus-emulator-installer/blob/main/ServiceBus-Emulator/Config/Config.json) configuration file. You can configure entities by making changes to configuration file. To know more, visit [make configuration changes](https://learn.microsoft.com/en-us/azure/service-bus-messaging/overview-emulator#quota-configuration-changes). 
+By default, emulator uses [config.json](https://github.com/Azure/azure-service-bus-emulator-installer/blob/main/ServiceBus-Emulator/Config/Config.json) configuration file. You can configure entities by making changes to configuration file. To know more, visit [make configuration changes](https://learn.microsoft.com/en-us/azure/service-bus-messaging/overview-emulator#quota-configuration-changes).
 
 >[!NOTE]
 > Service Bus emulator isn't compatible with the community owned [open source Service Bus Explorer](https://github.com/paolosalvatori/ServiceBusExplorer)
@@ -125,17 +125,6 @@ There is no official support provided for Emulator.Any issues/suggestions should
 
 The scripts and documentation in this project are released under the MIT License.
 
-The software (Azure Service Bus Emulator and Sql Edge) that the scripts in this repository install are licensed under separate terms. Refer to the terms governing each software below:
+The software (Azure Service Bus Emulator and SQL Server) that the scripts in this repository install are licensed under separate terms. Refer to the terms governing each software below:
 - Azure Service Bus emulator : [EULA](https://github.com/Azure/azure-service-bus-emulator-installer/blob/main/EMULATOR_EULA.txt)
-- Azure SQL Edge Developer Edition: [EULA](https://go.microsoft.com/fwlink/?linkid=2139274) 
-  - SQL Edge provides Developer and Premium editions, Service Bus Emulator relies on the Developer edition which is licensed for use as a development and test system and cannot be used in a production environment.
-
-
-
-
-
-
-
-   
-
-
+- SQL Server: [EULA](https://go.microsoft.com/fwlink/?linkid=857698)

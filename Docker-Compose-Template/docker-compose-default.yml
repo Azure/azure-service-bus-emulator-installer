@@ -8,25 +8,25 @@ services:
     ports:
       - "5672:5672"
     environment:
-      SQL_SERVER: sqledge
-      MSSQL_SA_PASSWORD: "${SQL_PASSWORD}"  # Password should be same as what is set for SQL Edge  
+      SQL_SERVER: sqlserver
+      MSSQL_SA_PASSWORD: "${SQL_PASSWORD}"  # Password should be same as what is set for SQL Server
       ACCEPT_EULA: ${ACCEPT_EULA}
     depends_on:
-      - sqledge
+      - sqlserver
     networks:
       sb-emulator:
         aliases:
           - "sb-emulator"
-  sqledge:
-        container_name: "sqledge"
-        image: "mcr.microsoft.com/azure-sql-edge:latest"
+  sqlserver:
+        container_name: "sqlserver"
+        image: "mcr.microsoft.com/mssql/server:latest"
         networks:
           sb-emulator:
             aliases:
-              - "sqledge"
+              - "sqlserver"
         environment:
           ACCEPT_EULA: ${ACCEPT_EULA}
-          MSSQL_SA_PASSWORD: "${SQL_PASSWORD}" # To be filled by user as per policy : https://learn.microsoft.com/en-us/sql/relational-databases/security/strong-passwords?view=sql-server-linux-ver16 
+          MSSQL_SA_PASSWORD: "${SQL_PASSWORD}" # To be filled by user as per policy : https://learn.microsoft.com/en-us/sql/relational-databases/security/strong-passwords?view=sql-server-linux-ver16
 
 networks:
   sb-emulator:
