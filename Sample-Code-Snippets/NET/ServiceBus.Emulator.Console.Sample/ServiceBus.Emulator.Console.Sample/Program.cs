@@ -135,7 +135,7 @@ internal class Program
     {
         Console.WriteLine($"Rcv_Sub {subscriptionName} Begin");
 
-        //Recieve on Sub 1
+        //  Receive on Sub 1
         var client1 = new ServiceBusClient(_connectionString);
         var opt1 = new ServiceBusProcessorOptions();
         opt1.ReceiveMode = ServiceBusReceiveMode.PeekLock;
