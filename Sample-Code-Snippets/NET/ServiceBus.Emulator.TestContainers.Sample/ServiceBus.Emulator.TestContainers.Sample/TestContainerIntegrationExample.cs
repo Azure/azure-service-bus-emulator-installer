@@ -46,7 +46,7 @@ namespace ServiceBus.Emulator.TestContainers.Sample
         [Test]
         public async Task SendAndReceiveTest()
         {
-            //Arrage
+            //Arrange
             const string helloMessage = "Hello Service-Bus !";
             var message = new ServiceBusMessage(helloMessage);
             await using var client = new ServiceBusClient(_serviceBusEmulatorContainer.GetConnectionString());
@@ -57,8 +57,8 @@ namespace ServiceBus.Emulator.TestContainers.Sample
 
             //Assert that the sent message is enqueued 
             var receiver = client.CreateReceiver(_testQueue);
-            var peekedMessage = await receiver.ReceiveMessageAsync();
-            Assert.That(peekedMessage.Body.ToString(), Is.EqualTo(helloMessage));
+            var receivedMessage = await receiver.ReceiveMessageAsync();
+            Assert.That(receivedMessage.Body.ToString(), Is.EqualTo(helloMessage));
         }
 
         [OneTimeTearDown]
