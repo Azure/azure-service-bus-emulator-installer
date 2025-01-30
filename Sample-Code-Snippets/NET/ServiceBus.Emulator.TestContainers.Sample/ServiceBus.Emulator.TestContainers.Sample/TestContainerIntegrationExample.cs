@@ -11,7 +11,7 @@ namespace ServiceBus.Emulator.TestContainers.Sample
         [OneTimeSetUp]
         public async Task Setup()
         {
-            //Sample Emulator Config; can be generated dynamically based on the test requirements, complex configs alternativley can also be read from a file
+            //Sample Emulator Config; can be generated dynamically based on the test requirements, complex configs alternatively can also be read from a file
             string emulatorConfig = $@"{{
             ""UserConfig"": {{
                 ""Namespaces"": [
@@ -36,16 +36,13 @@ namespace ServiceBus.Emulator.TestContainers.Sample
 
             //When running the following tests you are accepting SB Emulator EULA : https://github.com/Azure/azure-service-bus-emulator-installer/blob/main/EMULATOR_EULA.txt
             _serviceBusEmulatorContainer = new ServiceBusBuilder()
-            .WithBindMount(emulatorConfigFilePath, "/ServiceBus_Emulator/ConfigFiles/Config.json")
+            .WithBindMount(emulatorConfigFilePath, "/ServiceBus_Emulator/ConfigFiles/Config.json") 
             .WithAcceptLicenseAgreement(true)
             .Build();
 
             await _serviceBusEmulatorContainer.StartAsync();
         }
 
-        /// <summary>
-        /// This test tries to simulate both send and receive operations on the Service Bus Emulator
-        /// </summary>
         [Test]
         public async Task SendAndReceiveTest()
         {
