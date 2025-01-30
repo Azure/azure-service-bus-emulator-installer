@@ -3,10 +3,11 @@ using Testcontainers.ServiceBus;
 
 namespace ServiceBus.Emulator.TestContainers.Sample
 {
+    [TestFixture]
     public class TestContainerIntegrationExample
     {
         private ServiceBusContainer _serviceBusEmulatorContainer;
-        private string _testQueue = "contoso-queue";
+        private readonly string _testQueue = "contoso-queue";
 
         [OneTimeSetUp]
         public async Task Setup()
