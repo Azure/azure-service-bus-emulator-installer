@@ -53,10 +53,9 @@ internal class Program
 
     public static async Task ConsumeMessageFromDefaultQueue()
     {
-        var connectionString = "Endpoint=sb://127.0.0.1;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;";
         string queueName = "queue.1";
 
-        var client = new ServiceBusClient(connectionString);
+        var client = new ServiceBusClient(_connectionString);
 
         ServiceBusReceiverOptions opt = new ServiceBusReceiverOptions
         {
