@@ -1,8 +1,5 @@
-# The Python SDK support for Azure Service Bus Emulator will be available starting with version 7.13.1 which is unreleased at the time of writing this sample.
-# https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/servicebus/azure-servicebus/CHANGELOG.md#7131-unreleased
-
-# Install the Azure Service Bus SDK for Python using following command prior to running the sample:
-# pip install azure-servicebus==7.13.1 
+# Install the Azure Service Bus SDK for Python using following command prior to running the sample. Versions >=7.14.0 support Emulator.
+# pip install azure-servicebus==7.14.0 
 
 import os
 from azure.servicebus import ServiceBusClient, ServiceBusMessage
