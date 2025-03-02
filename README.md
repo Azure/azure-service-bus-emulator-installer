@@ -1,17 +1,21 @@
 
- # <img src="https://github.com/Azure/azure-service-bus-emulator-installer/blob/main/azure-servicebus-emulator.svg" alt="Event-Hubs Logo" width="50">    Azure Service Bus Emulator Installer
+ # <img src="https://github.com/Azure/azure-service-bus-emulator-installer/blob/main/azure-servicebus-emulator.svg" alt="Event-Hubs Logo" width="50">Azure Service Bus Emulator Installer
 
 This repository contains the scripts required to install and run the  [Azure Service Bus Emulator](https://learn.microsoft.com/en-us/azure/service-bus-messaging/overview-emulator).
 
-- [Azure Service Bus](#About-Azure-Service-Bus)
-  - [Emulator Overview](#About-Azure-Service-Bus-Emulator)
-  - [Prerequisites](#Prerequisites)
-  - [Running Emulator](#Running-the-emulator)
-    - [Using Automated Script](#Using-Automated-Script)
-    - [Using Docker Compose](#Using-Docker-Compose-Linux-Container)
-  - [Interacting with Emulator](#Interacting-with-emulator)
-  - [Support](#Support)
-  - [License](#License)
+- [Azure Service Bus Emulator Installer](#azure-service-bus-emulator-installer)
+  - [About Azure Service Bus](#about-azure-service-bus)
+  - [About Azure Service Bus emulator](#about-azure-service-bus-emulator)
+  - [Run Azure Service Bus Emulator](#run-azure-service-bus-emulator)
+  - [Prerequisites](#prerequisites)
+  - [Running the Emulator](#running-the-emulator)
+      - [Using Automated Script](#using-automated-script)
+    - [Windows](#windows)
+    - [Linux \& macOS](#linux--macos)
+      - [Using Docker Compose (Linux Container)](#using-docker-compose-linux-container)
+  - [Interacting with the emulator](#interacting-with-the-emulator)
+  - [Support](#support)
+  - [License](#license)
 
 ## About Azure Service Bus
 
@@ -87,7 +91,7 @@ Once the steps are successful, Emulator compose set can be found running in Dock
 
 ![test-locally-with-service-bus-emulator](https://github.com/user-attachments/assets/0792b294-a3dc-4980-aca2-ec4db04125a6)
 
-## Interact with the emulator
+## Interacting with the emulator
 
 By default, emulator uses [config.json](https://github.com/Azure/azure-service-bus-emulator-installer/blob/main/ServiceBus-Emulator/Config/Config.json) configuration file. You can configure entities by making changes to configuration file. To know more, visit [make configuration changes](https://learn.microsoft.com/en-us/azure/service-bus-messaging/overview-emulator#quota-configuration-changes). 
 
