@@ -1,7 +1,6 @@
 # Install the Azure Service Bus SDK for Python using following command prior to running the sample. Versions >=7.14.0 support Emulator.
 # pip install azure-servicebus==7.14.0 
 
-import os
 from azure.servicebus import ServiceBusClient, ServiceBusMessage
 
 CONNECTION_STR = "Endpoint=sb://127.0.0.1;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;"  
