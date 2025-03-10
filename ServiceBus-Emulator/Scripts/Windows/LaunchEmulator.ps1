@@ -4,7 +4,7 @@ param(
   [string]$SQL_PASSWORD=''
 )
 
-# For dynamic ports and support communication to host network use the commentted docker compose file path instead.
+# For dynamic ports and support communication to host network use the commented docker compose file path instead.
 # composeFile=$(realpath "$(dirname "$BASH_SOURCE")/../../../Docker-Compose-Template/docker-compose-custom-ports-windows-mac.yaml")
 $composeFile = Join-Path $PSScriptRoot "/../../../Docker-Compose-Template/docker-compose-default.yml"
 
