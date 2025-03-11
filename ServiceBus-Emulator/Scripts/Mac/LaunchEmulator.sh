@@ -90,7 +90,7 @@ if [[ "$COMPOSE_DOWN" != 'y' && "$COMPOSE_DOWN" != 'Y' ]]; then
     # Check if ACCEPT_EULA is 'Y' or 'y'
     if [[ "$ACCEPT_EULA" != "y" && "$ACCEPT_EULA" != "Y" ]]; then
         # EULA
-        echo 'By pressing "Y", you are expressing your consent to the End User License Agreement (EULA) for Service-Bus Emulator: https://github.com/Azure/azure-service-bus-emulator-installer/blob/main/EMULATOR_EULA.txt and Azure SQL Edge : https://go.microsoft.com/fwlink/?linkid=2139274'
+        echo 'By pressing "Y", you are expressing your consent to the End User License Agreement (EULA) for Service-Bus Emulator: https://github.com/Azure/azure-service-bus-emulator-installer/blob/main/EMULATOR_EULA.txt and SQL Server : https://go.microsoft.com/fwlink/?linkid=857698'
         read ACCEPT_EULA
         if [[ "$ACCEPT_EULA" != "y" && "$ACCEPT_EULA" != "Y" ]]; then
             echo "You must accept the EULA (Press 'Y') to continue. Exiting script."
