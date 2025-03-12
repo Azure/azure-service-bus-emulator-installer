@@ -1,1 +1,1 @@
-There is no official support provided for emulator.Any issues/suggestions should be reported via GitHub issues on emulator [GitHub project](https://github.com/Azure/azure-service-bus-emulator-installer/issues)
+There is no official support provided for the Azure Service Bus Emulator project. Any issues and suggestions should be reported via GitHub issues located at the [GitHub project](https://github.com/Azure/azure-service-bus-emulator-installer/issues).
