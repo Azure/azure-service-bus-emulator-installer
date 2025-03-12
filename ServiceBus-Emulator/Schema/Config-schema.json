@@ -77,7 +77,7 @@
                         "LockDuration": {
                           "type": "string",
                           "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
-                            "description": "Specifies the duration of a peek lock. Must be a valid ISO 8601 datetime string. The default value is PT1M (1 minute), the minimum value is PT5S (5 seconds) and the maximum value is PT5M (5 minutes).",
+                          "description": "Specifies the duration of a peek lock. Must be a valid ISO 8601 datetime string. The default value is PT1M (1 minute), the minimum value is PT5S (5 seconds) and the maximum value is PT5M (5 minutes).",
                           "examples": [
                             "PT1M",
                             "PT5M"
@@ -293,7 +293,8 @@
                                           "type": "string",
                                           "description": "SQL expression for the filter"
                                         }
-                                      }
+                                      },
+                                      "required": ["SqlExpression"]
                                     },
                                     "Action": {
                                       "type": "object",
@@ -302,50 +303,12 @@
                                           "type": "string",
                                           "description": "SQL expression for the action"
                                         }
-                                      }
+                                      },
+                                      "required": ["SqlExpression"]
                                     }
                                   },
                                   "required": [
                                     "FilterType"
-                                  ],
-                                  "oneOf": [
-                                    {
-                                      "properties": {
-                                        "FilterType": {
-                                          "enum": [
-                                            "Correlation"
-                                          ]
-                                        },
-                                        "CorrelationFilter": {
-                                          "type": "object",
-                                          "minProperties": 1
-                                        }
-                                      },
-                                      "required": [
-                                        "CorrelationFilter"
-                                      ]
-                                    },
-                                    {
-                                      "properties": {
-                                        "FilterType": {
-                                          "enum": [
-                                            "Sql"
-                                          ]
-                                        },
-                                        "SqlFilter": {
-                                          "type": "object",
-                                          "properties": {
-                                            "SqlExpression": {
-                                              "type": "string",
-                                              "description": "SQL expression for the filter"
-                                            }
-                                          }
-                                        }
-                                      },
-                                      "required": [
-                                        "SqlFilter"
-                                      ]
-                                    }
                                   ]
                                 }
                               },
