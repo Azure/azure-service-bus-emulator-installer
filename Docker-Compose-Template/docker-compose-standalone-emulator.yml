@@ -11,6 +11,7 @@ services:
       - "${CONFIG_PATH}:/ServiceBus_Emulator/ConfigFiles/Config.json"
     ports:
       - "5672:5672"
+      - "5300:5300"
     environment:
       SQL_SERVER: host.docker.internal:1433 # Host:Port for user speficied SQL DB container (Port is optional if default 1433 is used)
       MSSQL_SA_PASSWORD: "${SQL_PASSWORD}"  # Password for user specified SQL instance  

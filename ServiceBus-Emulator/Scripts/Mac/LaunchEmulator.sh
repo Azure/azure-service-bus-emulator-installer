@@ -1,5 +1,12 @@
 #!/bin/bash
 
+echo "
+Warning: To enhance the emulator experience, we are consolidating automated scripts into the Common folder.
+Standalone scripts in different folders will be phased out by June 2025. To prevent any issues, please 
+transition to using the Launchemulator.sh script in the Common folder:
+https://github.com/Azure/azure-service-bus-emulator-installer/blob/main/ServiceBus-Emulator/Scripts/Common/LaunchEmulator.sh
+"
+
 # Initialize variables
 ACCEPT_EULA='n'
 CONFIG_PATH='../ServiceBus-Emulator/Config/Config.json'

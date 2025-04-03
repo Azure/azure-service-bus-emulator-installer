@@ -8,6 +8,7 @@ services:
       - "./Config.json:/ServiceBus_Emulator/ConfigFiles/Config.json"
     ports:
       - "5672:5672"
+      - "5300:5300"
     environment: 
       SQL_SERVER: sqledge
       MSSQL_SA_PASSWORD: ""  # Password should be same as what is set for SQL Edge  

@@ -1,353 +1,372 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "properties": {
-      "UserConfig": {
-        "type": "object",
-        "properties": {
-          "Namespaces": {
-            "type": "array",
-            "description": "Namespace configuration is defined here",
-            "minItems": 1,
-            "maxItems": 1,
-            "items": {
-              "type": "object",
-              "properties": {
-                "Name": {
-                  "type": "string",
-                  "description": "Name of the namespace",
-                  "pattern": "^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$",
-                  "enum": [
-                    "sbemulatorns"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "UserConfig": {
+      "type": "object",
+      "properties": {
+        "Namespaces": {
+          "type": "array",
+          "description": "Namespace configuration is defined here",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "Name": {
+                "type": "string",
+                "description": "Name of the namespace",
+                "pattern": "^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$",
+                "enum": [
+                  "sbemulatorns"
+                ]
+              },
+              "Queues": {
+                "type": "array",
+                "description": "Queue configuration is defined here. Max Queues + Topics per namespace is 50",
+                "minItems": 0,
+                "maxItems": 50,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "Name": {
+                      "type": "string",
+                      "description": "Name of the queue",
+                      "pattern": "^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$"
+                    },
+                    "Properties": {
+                      "type": "object",
+                      "properties": {
+                        "DeadLetteringOnMessageExpiration": {
+                          "type": "boolean",
+                          "description": "Indicates whether this queue has dead letter support when a message expires",
+                          "default": false
+                        },
+                        "DefaultMessageTimeToLive": {
+                          "type": "string",
+                          "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
+                          "description": "Specifies the default time-to-live for messages. Must be a valid ISO 8601 datetime string. The default value is PT1H (1 hour), the minimum value is PT5M (5 minutes) and the maximum value is PT1H (1 hour).",
+                          "examples": [
+                            "PT5M",
+                            "PT10M",
+                            "PT1H"
+                          ],
+                          "default": "PT1H"
+                        },
+                        "DuplicateDetectionHistoryTimeWindow": {
+                          "type": "string",
+                          "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
+                          "description": "Specifies the time window for duplicate detection. Must be a valid ISO 8601 datetime string. The default value is PT20S (20 seconds), the minimum value is PT5S (5 seconds) and the maximum value is PT5M (5 minutes).",
+                          "examples": [
+                            "PT5S",
+                            "PT20S",
+                            "PT5M"
+                          ],
+                          "default": "PT20S"
+                        },
+                        "ForwardDeadLetteredMessagesTo": {
+                          "type": "string",
+                          "pattern": "^$|^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$",
+                          "description": "Forward dead lettered messages to"
+                        },
+                        "ForwardTo": {
+                          "type": "string",
+                          "pattern": "^$|^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$",
+                          "description": "Forward to"
+                        },
+                        "LockDuration": {
+                          "type": "string",
+                          "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
+                          "description": "Specifies the duration of a peek lock. Must be a valid ISO 8601 datetime string. The default value is PT1M (1 minute), the minimum value is PT5S (5 seconds) and the maximum value is PT5M (5 minutes).",
+                          "examples": [
+                            "PT1M",
+                            "PT5M"
+                          ],
+                          "default": "PT1M"
+                        },
+                        "MaxDeliveryCount": {
+                          "type": "integer",
+                          "description": "Specifies the maximum number of times a message delivery is attempted before it is moved to the dead-letter queue.",
+                          "minimum": 1,
+                          "maximum": 10,
+                          "default": 3
+                        },
+                        "RequiresDuplicateDetection": {
+                          "type": "boolean",
+                          "description": "Indicates whether this queue requires duplicate detection",
+                          "default": false
+                        },
+                        "RequiresSession": {
+                          "type": "boolean",
+                          "description": "Indicates whether this queue requires session support",
+                          "default": false
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "Name"
                   ]
-                },
-                "Queues": {
-                  "type": "array",
-                  "description": "Queue configuration is defined here. Max Queues + Topics per namespace is 50",
-                  "minItems": 0,
-                  "maxItems": 50,
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "Name": {
-                        "type": "string",
-                        "description": "Name of the queue",
-                        "pattern": "^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$"
-                      },
-                      "Properties": {
-                        "type": "object",
-                        "properties": {
-                          "DeadLetteringOnMessageExpiration": {
-                            "type": "boolean",
-                            "description": "Indicates whether this queue has dead letter support when a message expires",
-                            "default": false
-                          },
-                          "DefaultMessageTimeToLive": {
-                            "type": "string",
-                            "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
-                            "description": "Specifies the default time-to-live for messages. Must be a valid ISO 8601 datetime string. The default value is PT1H (1 hour), the minimum value is PT5M (5 minutes) and the maximum value is PT1H (1 hour).",
-                            "examples": [
-                              "PT5M",
-                              "PT10M",
-                              "PT1H"
-                            ],
-                            "default": "PT1H"
-                          },
-                          "DuplicateDetectionHistoryTimeWindow": {
-                            "type": "string",
-                            "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
-                            "description": "Specifies the time window for duplicate detection. Must be a valid ISO 8601 datetime string. The default value is PT20S (20 seconds), the minimum value is PT5S (5 seconds) and the maximum value is PT5M (5 minutes).",
-                            "examples": [
-                              "PT5S",
-                              "PT20S",
-                              "PT5M"
-                            ],
-                            "default": "PT20S"
-                          },
-                          "ForwardDeadLetteredMessagesTo": {
-                            "type": "string",
-                            "pattern": "^$|^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$",
-                            "description": "Forward dead lettered messages to"
-                          },
-                          "ForwardTo": {
-                            "type": "string",
-                            "pattern": "^$|^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$",
-                            "description": "Forward to"
-                          },
-                          "LockDuration": {
-                            "type": "string",
-                            "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
-                            "description": "Specifies the duration of a peek lock. Must be a valid ISO 8601 datetime string. The default value is PT1M (1 minute), the minimum value is PT1M (1 minute) and the maximum value is PT5M (5 minutes).",
-                            "examples": [
-                              "PT1M",
-                              "PT5M"
-                            ],
-                            "default": "PT1M"
-                          },
-                          "MaxDeliveryCount": {
-                            "type": "integer",
-                            "description": "Specifies the maximum number of times a message delivery is attempted before it is moved to the dead-letter queue.",
-                            "minimum": 1,
-                            "maximum": 10,
-                            "default": 3
-                          },
-                          "RequiresDuplicateDetection": {
-                            "type": "boolean",
-                            "description": "Indicates whether this queue requires duplicate detection",
-                            "default": false
-                          },
-                          "RequiresSession": {
-                            "type": "boolean",
-                            "description": "Indicates whether this queue requires session support",
-                            "default": false
-                          }
+                }
+              },
+              "Topics": {
+                "type": "array",
+                "description": "Topic configuration is defined here. Max Queues + Topics per namespace is 50",
+                "minItems": 0,
+                "maxItems": 50,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "Name": {
+                      "type": "string",
+                      "description": "Name of the topic",
+                      "pattern": "^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$"
+                    },
+                    "Properties": {
+                      "type": "object",
+                      "properties": {
+                        "DefaultMessageTimeToLive": {
+                          "type": "string",
+                          "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
+                          "description": "Specifies the default time-to-live for messages. Must be a valid ISO 8601 datetime string. The default value is PT1H (1 hour), the minimum value is PT5M (5 minutes) and the maximum value is PT1H (1 hour).",
+                          "examples": [
+                            "PT5M",
+                            "PT10M",
+                            "PT1H"
+                          ],
+                          "default": "PT1H"
+                        },
+                        "DuplicateDetectionHistoryTimeWindow": {
+                          "type": "string",
+                          "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
+                          "description": "Specifies the time window for duplicate detection. Must be a valid ISO 8601 datetime string. The default value is PT20S (20 seconds), the minimum value is PT5S (5 seconds) and the maximum value is PT5M (5 minutes).",
+                          "examples": [
+                            "PT5S",
+                            "PT20S",
+                            "PT5M"
+                          ],
+                          "default": "PT20S"
+                        },
+                        "RequiresDuplicateDetection": {
+                          "type": "boolean",
+                          "description": "Indicates whether this topic requires duplicate detection",
+                          "default": false
                         }
                       }
                     },
-                    "required": [
-                      "Name"
-                    ]
-                  }
-                },
-                "Topics": {
-                  "type": "array",
-                  "description": "Topic configuration is defined here. Max Queues + Topics per namespace is 50",
-                  "minItems": 0,
-                  "maxItems": 50,
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "Name": {
-                        "type": "string",
-                        "description": "Name of the topic",
-                        "pattern": "^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$"
-                      },
-                      "Properties": {
+                    "Subscriptions": {
+                      "type": "array",
+                      "description": "Subscription configuration is defined here",
+                      "minItems": 1,
+                      "maxItems": 50,
+                      "items": {
                         "type": "object",
                         "properties": {
-                          "DefaultMessageTimeToLive": {
+                          "Name": {
                             "type": "string",
-                            "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
-                            "description": "Specifies the default time-to-live for messages. Must be a valid ISO 8601 datetime string. The default value is PT1H (1 hour), the minimum value is PT5M (5 minutes) and the maximum value is PT1H (1 hour).",
-                            "examples": [
-                              "PT5M",
-                              "PT10M",
-                              "PT1H"
-                            ],
-                            "default": "PT1H"
+                            "description": "Name of the subscription",
+                            "pattern": "^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$"
                           },
-                          "DuplicateDetectionHistoryTimeWindow": {
-                            "type": "string",
-                            "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
-                            "description": "Specifies the time window for duplicate detection. Must be a valid ISO 8601 datetime string. The default value is PT20S (20 seconds), the minimum value is PT5S (5 seconds) and the maximum value is PT5M (5 minutes).",
-                            "examples": [
-                              "PT5S",
-                              "PT20S",
-                              "PT5M"
-                            ],
-                            "default": "PT20S"
-                          },
-                          "RequiresDuplicateDetection": {
-                            "type": "boolean",
-                            "description": "Indicates whether this topic requires duplicate detection",
-                            "default": false
-                          }
-                        }
-                      },
-                      "Subscriptions": {
-                          "type": "array",
-                          "description": "Subscription configuration is defined here",
-                          "minItems": 1,
-                          "maxItems": 50,
-                          "items": {
+                          "Properties": {
                             "type": "object",
                             "properties": {
-                              "Name": {
+                              "DeadLetteringOnMessageExpiration": {
+                                "type": "boolean",
+                                "description": "Indicates whether this subscription has dead letter support when a message expires",
+                                "default": false
+                              },
+                              "DefaultMessageTimeToLive": {
                                 "type": "string",
-                                "description": "Name of the subscription",
-                                "pattern": "^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$"
+                                "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
+                                "description": "Specifies the default time-to-live for messages. Must be a valid ISO 8601 datetime string. The default value is PT1H (1 hour), the minimum value is PT5M (5 minutes) and the maximum value is PT1H (1 hour).",
+                                "examples": [
+                                  "PT5M",
+                                  "PT10M",
+                                  "PT1H"
+                                ],
+                                "default": "PT1H"
                               },
-                              "Properties": {
-                                "type": "object",
-                                "properties": {
-                                  "DeadLetteringOnMessageExpiration": {
-                                    "type": "boolean",
-                                    "description": "Indicates whether this subscription has dead letter support when a message expires",
-                                    "default": false
-                                  },
-                                  "DefaultMessageTimeToLive": {
-                                    "type": "string",
-                                    "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
-                                    "description": "Specifies the default time-to-live for messages. Must be a valid ISO 8601 datetime string. The default value is PT1H (1 hour), the minimum value is PT5M (5 minutes) and the maximum value is PT1H (1 hour).",
-                                    "examples": [
-                                      "PT5M",
-                                      "PT10M",
-                                      "PT1H"
-                                    ],
-                                    "default": "PT1H"
-                                  },
-                                  "LockDuration": {
-                                    "type": "string",
-                                    "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
-                                    "description": "Specifies the duration of a peek lock. Must be a valid ISO 8601 datetime string. The default value is PT1M (1 minute), the minimum value is PT1M (1 minute) and the maximum value is PT5M (5 minutes).",
-                                    "examples": [
-                                      "PT1M",
-                                      "PT5M"
-                                    ],
-                                    "default": "PT1M"
-                                  },
-                                  "MaxDeliveryCount": {
-                                    "type": "integer",
-                                    "description": "Specifies the maximum number of times a message delivery is attempted before it is moved to the dead-letter queue.",
-                                    "minimum": 1,
-                                    "maximum": 10,
-                                    "default": 3
-                                  },
-                                  "ForwardDeadLetteredMessagesTo": {
-                                    "type": "string",
-                                    "pattern": "^$|^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$",
-                                    "description": "Forward dead lettered messages to"
-                                  },
-                                  "ForwardTo": {
-                                    "type": "string",
-                                    "pattern": "^$|^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$",
-                                    "description": "Forward to"
-                                  },
-                                  "RequiresSession": {
-                                    "type": "boolean",
-                                    "description": "Indicates whether this queue requires session support",
-                                    "default": false
-                                  }
-                                }
+                              "LockDuration": {
+                                "type": "string",
+                                "pattern": "^P(?!$)(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+S)?)?$",
+                                "description": "Specifies the duration of a peek lock. Must be a valid ISO 8601 datetime string. The default value is PT1M (1 minute), the minimum value is PT1M (1 minute) and the maximum value is PT5M (5 minutes).",
+                                "examples": [
+                                  "PT1M",
+                                  "PT5M"
+                                ],
+                                "default": "PT1M"
                               },
-                              "Rules": {
-                                  "type": "array",
-                                  "description": "Rule configuration is defined here. Maximum Rules per topic is 1000",
-                                  "minItems": 0,
-                                  "maxItems": 1000,
-                                  "items": {
-                                    "type": "object",
-                                    "properties": {
-                                      "Name": {
-                                        "type": "string",
-                                        "description": "Name of the rule",
-                                        "pattern": "^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$"
-                                      },
-                                      "Properties": {
-                                        "type": "object",
-                                        "properties": {
-                                          "FilterType": {
-                                            "type": "string",
-                                            "description": "Type of filter",
-                                            "enum": [
-                                              "Correlation",
-                                              "Sql"
-                                            ]
-                                          },
-                                          "CorrelationFilter": {
-                                            "type": "object",
-                                            "minProperties": 1,
-                                            "properties": {
-                                              "ContentType": {
-                                                "type": "string",
-                                                "description": "Content type"
-                                              },
-                                              "CorrelationId": {
-                                                "type": "string",
-                                                "description": "Correlation id"
-                                              },
-                                              "Label": {
-                                                "type": "string",
-                                                "description": "Label"
-                                              },
-                                              "MessageId": {
-                                                "type": "string",
-                                                "description": "Message id"
-                                              },
-                                              "ReplyTo": {
-                                                "type": "string",
-                                                "description": "Reply to"
-                                              },
-                                              "ReplyToSessionId": {
-                                                "type": "string",
-                                                "description": "Reply to session id"
-                                              },
-                                              "SessionId": {
-                                                "type": "string",
-                                                "description": "Session id"
-                                              },
-                                              "To": {
-                                                "type": "string",
-                                                "description": "To"
-                                              },
-                                              "Properties":{
-                                                "type": "object",
-                                                "minProperties": 1
-                                              }
-                                            }
-                                          }
-                                        },
-                                        "required": [
-                                        "FilterType",
-                                        "CorrelationFilter"
+                              "MaxDeliveryCount": {
+                                "type": "integer",
+                                "description": "Specifies the maximum number of times a message delivery is attempted before it is moved to the dead-letter queue.",
+                                "minimum": 1,
+                                "maximum": 10,
+                                "default": 3
+                              },
+                              "ForwardDeadLetteredMessagesTo": {
+                                "type": "string",
+                                "pattern": "^$|^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$",
+                                "description": "Forward dead lettered messages to"
+                              },
+                              "ForwardTo": {
+                                "type": "string",
+                                "pattern": "^$|^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$",
+                                "description": "Forward to"
+                              },
+                              "RequiresSession": {
+                                "type": "boolean",
+                                "description": "Indicates whether this queue requires session support",
+                                "default": false
+                              }
+                            }
+                          },
+                          "Rules": {
+                            "type": "array",
+                            "description": "Rule configuration is defined here. Maximum Rules per topic is 1000",
+                            "minItems": 0,
+                            "maxItems": 1000,
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "Name": {
+                                  "type": "string",
+                                  "description": "Name of the rule",
+                                  "pattern": "^[A-Za-z0-9]$|^[A-Za-z0-9][\\w-\\.\\/]*[A-Za-z0-9]$"
+                                },
+                                "Properties": {
+                                  "type": "object",
+                                  "properties": {
+                                    "FilterType": {
+                                      "type": "string",
+                                      "description": "Type of filter",
+                                      "enum": [
+                                        "Correlation",
+                                        "Sql"
                                       ]
+                                    },
+                                    "CorrelationFilter": {
+                                      "type": "object",
+                                      "minProperties": 1,
+                                      "properties": {
+                                        "ContentType": {
+                                          "type": "string",
+                                          "description": "Content type"
+                                        },
+                                        "CorrelationId": {
+                                          "type": "string",
+                                          "description": "Correlation id"
+                                        },
+                                        "Label": {
+                                          "type": "string",
+                                          "description": "Label"
+                                        },
+                                        "MessageId": {
+                                          "type": "string",
+                                          "description": "Message id"
+                                        },
+                                        "ReplyTo": {
+                                          "type": "string",
+                                          "description": "Reply to"
+                                        },
+                                        "ReplyToSessionId": {
+                                          "type": "string",
+                                          "description": "Reply to session id"
+                                        },
+                                        "SessionId": {
+                                          "type": "string",
+                                          "description": "Session id"
+                                        },
+                                        "To": {
+                                          "type": "string",
+                                          "description": "To"
+                                        },
+                                        "Properties": {
+                                          "type": "object",
+                                          "minProperties": 1
+                                        }
                                       }
                                     },
-                                    "required": [
-                                      "Name",
-                                      "Properties"
-                                    ]
-                                  }
+                                    "SqlFilter": {
+                                      "type": "object",
+                                      "properties": {
+                                        "SqlExpression": {
+                                          "type": "string",
+                                          "description": "SQL expression for the filter"
+                                        }
+                                      },
+                                      "required": ["SqlExpression"]
+                                    },
+                                    "Action": {
+                                      "type": "object",
+                                      "properties": {
+                                        "SqlExpression": {
+                                          "type": "string",
+                                          "description": "SQL expression for the action"
+                                        }
+                                      },
+                                      "required": ["SqlExpression"]
+                                    }
+                                  },
+                                  "required": [
+                                    "FilterType"
+                                  ]
                                 }
-                            },
-                            "required": [
-                              "Name"
-                            ]
+                              },
+                              "required": [
+                                "Name",
+                                "Properties"
+                              ]
+                            }
                           }
-                        }
-                    },
-                    "required": [
-                      "Name",
-                      "Subscriptions"
-                    ]
-                  }
+                        },
+                        "required": [
+                          "Name"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "Name",
+                    "Subscriptions"
+                  ]
                 }
-              },
-              "required": [
-                "Name",
-                "Queues",
-                "Topics"
-              ]
-            }
-          },
-          "Logging": {
-            "type": "object",
-            "description": "Configuration for logging is defined here",
-            "properties": {
-              "Type": {
-                "type": "string",
-                "description": "Types of logging",
-                "enum": [
-                  "File",
-                  "Console",
-                  "File,Console",
-                  "Console,File"
-                ]
               }
             },
             "required": [
-              "Type"
+              "Name",
+              "Queues",
+              "Topics"
             ]
           }
         },
-        "required": [
-          "Namespaces",
-          "Logging"
-        ]
-      }
-    },
-    "required": [
-      "UserConfig"
-    ],
-    "description": "Main user configuration object"
-  }
+        "Logging": {
+          "type": "object",
+          "description": "Configuration for logging is defined here",
+          "properties": {
+            "Type": {
+              "type": "string",
+              "description": "Types of logging",
+              "enum": [
+                "File",
+                "Console",
+                "File,Console",
+                "Console,File"
+              ]
+            }
+          },
+          "required": [
+            "Type"
+          ]
+        }
+      },
+      "required": [
+        "Namespaces",
+        "Logging"
+      ]
+    }
+  },
+  "required": [
+    "UserConfig"
+  ],
+  "description": "Main user configuration object"
+}
