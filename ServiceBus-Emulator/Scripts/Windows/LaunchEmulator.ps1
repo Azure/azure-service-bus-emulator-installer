@@ -4,6 +4,11 @@ param(
   [string]$SQL_PASSWORD=''
 )
 
+Write-Warning "As running native .ps1 script required updating your machine's execution policy,
+         the .ps1 script will be phased out by June 2025. To mitigate this, please transition
+         to running .sh script via WSL on Windows. You can find the Launchemulator.sh script in
+         the Common folder: https://github.com/Azure/azure-service-bus-emulator-installer/blob/main/ServiceBus-Emulator/Scripts/Common/LaunchEmulator.sh"
+
 # For dynamic ports and support communication to host network use the commentted docker compose file path instead.
 # composeFile=$(realpath "$(dirname "$BASH_SOURCE")/../../../Docker-Compose-Template/docker-compose-custom-ports-windows-mac.yaml")
 $composeFile = Join-Path $PSScriptRoot "/../../../Docker-Compose-Template/docker-compose-default.yml"

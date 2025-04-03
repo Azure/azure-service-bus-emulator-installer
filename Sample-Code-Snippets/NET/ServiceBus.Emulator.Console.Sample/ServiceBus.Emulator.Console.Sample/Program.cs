@@ -117,6 +117,19 @@ internal class Program
 
                 await sender.SendMessageAsync(message);
             }
+
+            //Next 50 message will goto Subscription 3 and Subscription 4 as per set filters  in Config.json
+
+            for (int i = 101; i <= 150; i++)
+            {
+                ServiceBusMessage message = new ServiceBusMessage(Encoding.UTF8.GetBytes($"Message number : {i}"))
+                {
+                    MessageId = "123456"
+                };
+                message.ApplicationProperties.Add("userProp1", "value1");
+
+                await sender.SendMessageAsync(message);
+            }
         }
 
         Console.WriteLine("Sent 100 messages to the topic.");
@@ -128,6 +141,7 @@ internal class Program
         await ConsumeMessageFromSubscription(topicName, "subscription.1");
         await ConsumeMessageFromSubscription(topicName, "subscription.2");
         await ConsumeMessageFromSubscription(topicName, "subscription.3");
+        await ConsumeMessageFromSubscription(topicName, "subscription.4");
     }
 
     private static async Task ConsumeMessageFromSubscription(string topicName,string subscriptionName)
@@ -156,7 +170,7 @@ internal class Program
     private static async Task MessageHandler(ProcessMessageEventArgs args)
     {
         string body = args.Message.Body.ToString();
-        Console.WriteLine($"Received message: SequenceNumber:{args.Message.SequenceNumber} Body:{body}");
+        Console.WriteLine($"Received message: SequenceNumber:{args.Message.SequenceNumber} Body:{body} To:{args.Message.To}");
         await args.CompleteMessageAsync(args.Message);
     }
 
