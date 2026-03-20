@@ -68,8 +68,34 @@ After completing the prerequisites, you can proceed with the following steps to 
 
 3. **Run the setup script** *./LaunchEmulator.sh* Running the script brings up two containers: Service Bus emulator and SQLedge (a dependency for the emulator).
    ```bash
-   ./Launchemulator.sh
+   ./LaunchEmulator.sh
  
+#### -bash: ./LaunchEmulator.sh: cannot execute: required file not found Issue
+
+This error typically occurs when the script has Windows line endings (CRLF) instead of Unix line endings (LF), or when the shebang line references an interpreter that doesn't exist.
+
+Let's diagnose and fix this:
+
+1. First, check the file's line endings and shebang:
+```
+file LaunchEmulator.sh
+head -1 LaunchEmulator.sh
+```
+
+2. Convert Windows line endings to Unix format:
+```
+sed -i 's/\r$//' LaunchEmulator.sh
+```
+
+3. Make sure it has execute permissions:
+```
+chmod +x LaunchEmulator.sh
+```
+
+4. Try running it again:
+```
+./LaunchEmulator.sh
+```
 
 
 ### Linux & macOS
