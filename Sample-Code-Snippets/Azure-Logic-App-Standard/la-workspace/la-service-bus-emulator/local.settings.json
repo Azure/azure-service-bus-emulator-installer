@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_INPROC_NET8_ENABLED": "1",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "APP_KIND": "workflowapp",
+    "ProjectDirectoryPath": "c:\\source\\azure-service-bus-emulator-installer\\Sample-Code-Snippets\\Azure-Logic-App-Standard\\la-workspace\\la-service-bus-emulator",
+    "WORKFLOWS_SUBSCRIPTION_ID": "",
+    "Azure_Service_Bus_Connection_String":"Endpoint=sb://127.0.0.1;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;"
+  }
+}
