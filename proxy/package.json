@@ -1,0 +1,25 @@
+{
+  "name": "azure-servicebus-emulator-proxy",
+  "version": "1.0.0",
+  "description": "AMQP connection multiplexing proxy for Azure Service Bus Emulator",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "pino": "9.6.0",
+    "rhea": "3.0.4",
+    "zod": "3.24.4"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.3",
+    "typescript": "5.8.3"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "private": true
+}
