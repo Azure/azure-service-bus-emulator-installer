@@ -1,0 +1,56 @@
+name: microsoft-azure-servicebus-emulator
+services:
+  amqp-proxy:
+    container_name: "amqp-proxy"
+    build:
+      context: ../proxy
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:5672:5672"
+    environment:
+      BACKEND_HOST: sb-emulator
+      BACKEND_PORT: 5672
+      MAX_BACKEND_CONNECTIONS: ${MAX_BACKEND_CONNECTIONS:-8}
+      MAX_CLIENT_CONNECTIONS: ${MAX_CLIENT_CONNECTIONS:-100}
+      LOG_LEVEL: ${PROXY_LOG_LEVEL:-info}
+    depends_on:
+      - emulator
+    networks:
+      sb-emulator:
+        aliases:
+          - "sb-proxy"
+
+  emulator:
+    container_name: "servicebus-emulator"
+    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
+    pull_policy: always
+    volumes:
+      - "${CONFIG_PATH:-../ServiceBus-Emulator/Config/Config.json}:/ServiceBus_Emulator/ConfigFiles/Config.json"
+    ports:
+      - "5300:${EMULATOR_HTTP_PORT:-5300}"
+    environment:
+      SQL_SERVER: sqledge
+      MSSQL_SA_PASSWORD: "${SQL_PASSWORD}"
+      ACCEPT_EULA: ${ACCEPT_EULA}
+      SQL_WAIT_INTERVAL: ${SQL_WAIT_INTERVAL}
+      EMULATOR_HTTP_PORT: ${EMULATOR_HTTP_PORT:-5300}
+    depends_on:
+      - sqledge
+    networks:
+      sb-emulator:
+        aliases:
+          - "sb-emulator"
+
+  sqledge:
+    container_name: "sqledge"
+    image: "mcr.microsoft.com/azure-sql-edge:latest"
+    networks:
+      sb-emulator:
+        aliases:
+          - "sqledge"
+    environment:
+      ACCEPT_EULA: ${ACCEPT_EULA}
+      MSSQL_SA_PASSWORD: "${SQL_PASSWORD}"
+
+networks:
+  sb-emulator:
