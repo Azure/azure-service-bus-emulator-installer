@@ -166,7 +166,7 @@ The Service Bus emulator uses a static connection string, but the host value var
 > By default, management operations using the Service Bus Administration Client require appending the **port number** to the emulator connection string.<br>
 > 
 > For example, when both the emulator and the application are running on the same machine, use the following connection string for administration operations:<br>
-> `"Endpoint=sb://localhost:5300;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;";`
+> `Endpoint=sb://localhost:5300;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;`
 > 
 > For management operations & health-check, the emulator uses port 5300 by default.<br>
 > You can configure the emulator to use a different port if required using the `EMULATOR_HTTP_PORT` environment variable.
