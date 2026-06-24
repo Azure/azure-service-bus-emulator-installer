@@ -1,7 +1,9 @@
 param(
   [string]$ACCEPT_EULA='n',
   [string]$CONFIG_PATH='../ServiceBus-Emulator/Config/Config.json',
-  [string]$SQL_PASSWORD=''
+  [string]$SQL_PASSWORD='',
+  [string]$EMULATOR_AMQP_PORT='5672',
+  [string]$EMULATOR_HTTP_PORT='5300'
 )
 
 Write-Warning "As running native .ps1 script required updating your machine's execution policy,
@@ -89,6 +91,12 @@ $env:SQL_PASSWORD = $SQL_PASSWORD
 
 # Set Config Path as env variable
 $env:CONFIG_PATH = $CONFIG_PATH
+
+# Set AMQP host port as env variable
+$env:EMULATOR_AMQP_PORT = $EMULATOR_AMQP_PORT
+
+# Set HTTP management port as env variable
+$env:EMULATOR_HTTP_PORT = $EMULATOR_HTTP_PORT
 
 # Run Docker Compose
 docker compose -f $composeFile down

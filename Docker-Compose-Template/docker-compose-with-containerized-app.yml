@@ -7,7 +7,7 @@ services:
     volumes:
       - "${CONFIG_PATH:-../ServiceBus-Emulator/Config/Config.json}:/ServiceBus_Emulator/ConfigFiles/Config.json"
     ports:
-      - "5672:5672"
+      - "${EMULATOR_AMQP_PORT:-5672}:5672"
       - "5300:${EMULATOR_HTTP_PORT:-5300}"
     environment:
       SQL_SERVER: sqledge
@@ -146,4 +146,3 @@ services:
           - "java-sample-client-app"
 networks:
   sb-emulator:
-

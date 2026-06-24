@@ -104,6 +104,11 @@ After completing the prerequisites, you can proceed with the following steps to 
 
 1. Execute the setup script `LaunchEmulator.sh` . Running the script would  bring up two containers – Service Bus Emulator & Azure SQL Edge (dependency for Emulator)
 
+   Optionally, you can remap the host AMQP port (for example, to avoid conflicts with other local emulators):
+   ```shell
+   LaunchEmulator.sh --EMULATOR_AMQP_PORT=5674
+   ```
+
 
 2. Execute the same script `LaunchEmulator.sh` with the option `--compose-down=Y` to issue a `docker compose down` to terminate the containers.
 
@@ -155,10 +160,13 @@ The Service Bus emulator uses a static connection string, but the host value var
 
 > [!IMPORTANT]
 > 
+> Message send/receive operations use AMQP port **5672** by default.<br>
+> If you remap the host AMQP port (for example, `EMULATOR_AMQP_PORT=5674`), append that port in the connection string endpoint (for example, `Endpoint=sb://localhost:5674;...`).<br>
+> 
 > By default, management operations using the Service Bus Administration Client require appending the **port number** to the emulator connection string.<br>
 > 
 > For example, when both the emulator and the application are running on the same machine, use the following connection string for administration operations:<br>
-`"Endpoint=sb://localhost:5300;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;";`
+> `"Endpoint=sb://localhost:5300;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;";`
 > 
 > For management operations & health-check, the emulator uses port 5300 by default.<br>
 > You can configure the emulator to use a different port if required using the `EMULATOR_HTTP_PORT` environment variable.
