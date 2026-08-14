@@ -2,7 +2,7 @@ name: udir
 services:
   service-bus-explorer:
     build:
-      context: ./Source/ServiceBusExplorer.Spa
+      context: ./
       dockerfile: Dockerfile
     image: udir/servicebus-explorer:1.1.3
     container_name: servicebus-explorer

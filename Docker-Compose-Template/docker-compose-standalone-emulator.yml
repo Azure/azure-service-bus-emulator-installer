@@ -1,7 +1,7 @@
 # Sample Docker Compose if user wants to reuse their own *Non-Production* SQL container instance. 
 # This sample assumes that user mounts their SQL container to host machine 
 
-name: microsoft-azure-servicebus-emulator
+name: microsoft
 services:
   emulator:
     container_name: "servicebus-emulator"

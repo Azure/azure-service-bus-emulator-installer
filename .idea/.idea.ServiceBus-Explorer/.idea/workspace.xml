@@ -137,8 +137,16 @@
       <updated>1786689091434</updated>
       <workItem from="1786689091647" duration="57000" />
       <workItem from="1786689165829" duration="24000" />
-      <workItem from="1786689226940" duration="1450000" />
+      <workItem from="1786689226940" duration="1782000" />
     </task>
+    <task id="LOCAL−00001" summary="Added servicebus explorer app">
+      <option name="closed" value="true" />
+      <created>1786690732842</created>
+      <option name="number" value="LOCAL−00001" />
+      <option name="presentableId" value="LOCAL−00001" />
+      <updated>1786690732842</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -148,6 +156,8 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Added servicebus explorer app" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
