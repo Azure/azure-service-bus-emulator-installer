@@ -1,0 +1,14 @@
+name: udir
+services:
+  service-bus-explorer:
+    build:
+      context: ./Source/ServiceBusExplorer.Spa
+      dockerfile: Dockerfile
+    image: udir/servicebus-explorer:1.1.3
+    container_name: servicebus-explorer
+    restart: unless-stopped
+    ports:
+      - "9010:9010"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "9010"

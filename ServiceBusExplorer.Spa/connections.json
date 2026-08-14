@@ -1,0 +1,14 @@
+{
+  "connections": [
+    {
+      "name": "Service Bus Local Emulator",
+      "connectionString": "Endpoint=sb://localhost;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true",
+      "queue": "prover-worker"
+    },
+    {
+      "name": "Service Bus Docker Emulator",
+      "connectionString": "Endpoint=sb://host.docker.internal;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true",
+      "queue": "prover-worker"
+    }
+  ]
+}

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Service Bus Queue Viewer</title>
+    <style>
+        :root {
+            --bg: #f5f6f8;
+            --card: #ffffff;
+            --border: #e3e6ea;
+            --text: #1f2733;
+            --muted: #6b7280;
+            --accent: #2563eb;
+            --dead: #dc2626;
+            --dead-bg: #fef2f2;
+            --green: #059669;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        header {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 18px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        header h1 {
+            font-size: 18px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        header .queue {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .auto {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+            font-size: 13px;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .auto input {
+            cursor: pointer;
+        }
+
+        select.interval {
+            background: #fff;
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        button.refresh {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        button#refreshBtn {
+            width: 104px;
+            text-align: center;
+        }
+
+        button.refresh:hover {
+            opacity: 0.92;
+        }
+
+        button.refresh:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        main {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 28px;
+        }
+
+        .summary {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 34px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            flex: 1 1 200px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .stat .stat-num {
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .stat .stat-label {
+            font-size: 13px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            font-weight: 600;
+        }
+
+        .stat.dead .stat-num {
+            color: var(--dead);
+        }
+
+        .section {
+            margin-bottom: 34px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .section-head h2 {
+            font-size: 15px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .badge {
+            background: #eef1f5;
+            color: var(--muted);
+            border-radius: 20px;
+            padding: 2px 10px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge.dead {
+            background: var(--dead-bg);
+            color: var(--dead);
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 11px 16px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 240px;
+        }
+
+        th {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--muted);
+            font-weight: 600;
+            background: #fafbfc;
+        }
+
+        tbody tr {
+            cursor: pointer;
+        }
+
+        tbody tr:hover {
+            background: #f0f6ff;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        td.actions {
+            white-space: nowrap;
+            text-align: right;
+        }
+
+        .act {
+            border: 1px solid var(--border);
+            background: #fff;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-left: 6px;
+        }
+
+        .act:hover {
+            background: #f3f4f6;
+        }
+
+        .act.resubmit {
+            color: var(--green);
+            border-color: #a7f3d0;
+        }
+
+        .act.resubmit:hover {
+            background: #ecfdf5;
+        }
+
+        .act.delete {
+            color: var(--dead);
+            border-color: #fecaca;
+        }
+
+        .act.delete:hover {
+            background: var(--dead-bg);
+        }
+
+        .act:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        .presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .presets .act {
+            margin-left: 0;
+        }
+
+        .empty, .error {
+            padding: 22px 16px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .error {
+            color: var(--dead);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #111827;
+            color: #fff;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.err {
+            background: var(--dead);
+        }
+
+        /* Modal */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 24, 39, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--card);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 640px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-head h3 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+            color: var(--muted);
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .meta {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 6px 16px;
+            margin-bottom: 18px;
+        }
+
+        .meta dt {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .meta dd {
+            margin: 0;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        pre {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: 8px;
+            overflow: auto;
+            font-size: 13px;
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .modal-foot {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .field input, .field textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 9px 11px;
+            font-size: 13px;
+            font-family: inherit;
+            color: var(--text);
+            resize: vertical;
+        }
+
+        .field input:focus, .field textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div>
+        <h1>Service Bus Queue Viewer</h1>
+        <div class="queue" id="queueName">&nbsp;</div>
+    </div>
+    <div class="controls">
+        <label class="auto">
+            <input id="autoToggle" onchange="toggleAuto()" type="checkbox"/>
+            Auto-refresh
+        </label>
+        <select class="interval" id="intervalSelect" onchange="toggleAuto()" title="Auto-refresh interval">
+            <option value="1000">1s</option>
+            <option selected value="5000">5s</option>
+            <option value="10000">10s</option>
+            <option value="30000">30s</option>
+            <option value="60000">1m</option>
+            <option value="300000">5m</option>
+        </select>
+        <button class="refresh" id="connBtn" onclick="openSettings()" style="background:#fff;color:var(--text);border:1px solid var(--border);">Connection</button>
+        <button class="refresh" id="refreshBtn" onclick="load()">Refresh</button>
+    </div>
+</header>
+
+<main>
+    <div class="summary">
+        <div class="stat">
+            <span class="stat-num" id="activeTotal">0</span>
+            <span class="stat-label">Active messages</span>
+        </div>
+        <div class="stat dead">
+            <span class="stat-num" id="deadTotal">0</span>
+            <span class="stat-label">Dead-letter messages</span>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="section-head">
+            <h2>Active messages</h2>
+            <span class="badge" id="activeCount">0</span>
+            <button class="act delete" onclick="delAll('active')" style="margin-left:auto;">Delete all</button>
+        </div>
+        <div class="card" id="activeCard"></div>
+    </section>
+
+    <section class="section">
+        <div class="section-head">
+            <h2>Dead-letter messages</h2>
+            <span class="badge dead" id="deadCount">0</span>
+            <button class="act delete" onclick="delAll('deadLetter')" style="margin-left:auto;">Delete all</button>
+        </div>
+        <div class="card" id="deadCard"></div>
+    </section>
+</main>
+
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+        <div class="modal-head">
+            <h3>Message details</h3>
+            <button class="close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <dl class="meta" id="modalMeta"></dl>
+            <pre id="modalBody"></pre>
+        </div>
+        <div class="modal-foot" id="modalFoot"></div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="overlay" id="settingsOverlay" onclick="if(event.target===this)closeSettings()">
+    <div class="modal">
+        <div class="modal-head">
+            <h3>Service Bus connection</h3>
+            <button class="close" onclick="closeSettings()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="margin-top:0;color:var(--muted);">
+                These details are kept only in this browser tab (session storage) and are sent with each
+                request. They are never stored on the server.
+            </p>
+            <div class="field" id="presetsField" style="display:none;">
+                <label>Quick load</label>
+                <div class="presets" id="presetButtons"></div>
+            </div>
+            <div class="field">
+                <label for="connInput">Connection string</label>
+                <textarea id="connInput" placeholder="Endpoint=sb://your-namespace.servicebus.windows.net/;SharedAccessKeyName=...;SharedAccessKey=..." rows="3"
+                          spellcheck="false"></textarea>
+            </div>
+            <div class="field">
+                <label for="queueInput">Queue name</label>
+                <input id="queueInput" placeholder="my-queue" spellcheck="false" type="text"/>
+            </div>
+            <div class="error" id="settingsError" style="display:none;text-align:left;padding:0;"></div>
+        </div>
+        <div class="modal-foot">
+            <button class="act delete" onclick="clearSettings()">Clear</button>
+            <button class="act resubmit" onclick="saveSettings()">Save &amp; connect</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let current = {active: [], deadLetter: []};
+    let autoTimer = null;
+    let busy = false;
+
+    const STORE_KEY = "sbConnection";
+
+    function getSettings() {
+        try {
+            return JSON.parse(sessionStorage.getItem(STORE_KEY)) || null;
+        } catch {
+            return null;
+        }
+    }
+
+    function hasSettings() {
+        const s = getSettings();
+        return !!(s && s.connectionString && s.queue);
+    }
+
+    function sbHeaders(extra) {
+        const s = getSettings() || {};
+        return Object.assign({
+            "X-ServiceBus-ConnectionString": s.connectionString || "",
+            "X-ServiceBus-Queue": s.queue || ""
+        }, extra || {});
+    }
+
+    function openSettings() {
+        const s = getSettings() || {};
+        document.getElementById("connInput").value = s.connectionString || "";
+        document.getElementById("queueInput").value = s.queue || "";
+        document.getElementById("settingsError").style.display = "none";
+        document.getElementById("settingsOverlay").classList.add("open");
+        loadPresets();
+    }
+
+    async function loadPresets() {
+        const field = document.getElementById("presetsField");
+        const container = document.getElementById("presetButtons");
+        try {
+            const res = await fetch("/api/connections");
+            if (!res.ok) throw new Error("request failed");
+            const presets = await res.json();
+            if (!Array.isArray(presets) || presets.length === 0) {
+                field.style.display = "none";
+                return;
+            }
+            container.innerHTML = "";
+            presets.forEach(p => {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "act";
+                btn.textContent = p.name;
+                if (p.queue) btn.title = "Queue: " + p.queue;
+                btn.onclick = () => applyPreset(p);
+                container.appendChild(btn);
+            });
+            field.style.display = "block";
+        } catch {
+            field.style.display = "none";
+        }
+    }
+
+    function applyPreset(p) {
+        document.getElementById("connInput").value = p.connectionString || "";
+        document.getElementById("queueInput").value = p.queue || "";
+        document.getElementById("settingsError").style.display = "none";
+    }
+
+    function closeSettings() {
+        document.getElementById("settingsOverlay").classList.remove("open");
+    }
+
+    function saveSettings() {
+        const connectionString = document.getElementById("connInput").value.trim();
+        const queue = document.getElementById("queueInput").value.trim();
+        const errEl = document.getElementById("settingsError");
+        if (!connectionString || !queue) {
+            errEl.textContent = "Both a connection string and a queue name are required.";
+            errEl.style.display = "block";
+            return;
+        }
+        sessionStorage.setItem(STORE_KEY, JSON.stringify({connectionString, queue}));
+        closeSettings();
+        updateQueueLabel();
+        load();
+    }
+
+    function clearSettings() {
+        sessionStorage.removeItem(STORE_KEY);
+        closeSettings();
+        updateQueueLabel();
+        current = {active: [], deadLetter: []};
+        document.getElementById("activeCount").textContent = "0";
+        document.getElementById("deadCount").textContent = "0";
+        document.getElementById("activeTotal").textContent = "0";
+        document.getElementById("deadTotal").textContent = "0";
+        document.getElementById("activeCard").innerHTML =
+            '<div class="empty">Not connected. Click “Connection” to enter your Service Bus details.</div>';
+        document.getElementById("deadCard").innerHTML = "";
+    }
+
+    function updateQueueLabel() {
+        const s = getSettings();
+        document.getElementById("queueName").textContent = s && s.queue ? "Queue: " + s.queue : "Not connected";
+    }
+
+    function esc(s) {
+        return String(s ?? "").replace(/[&<>"]/g, c =>
+            ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+    }
+
+    function fmtDate(iso) {
+        const d = new Date(iso);
+        return isNaN(d) ? "" : d.toLocaleString();
+    }
+
+    function toast(msg, isErr) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.className = "toast show" + (isErr ? " err" : "");
+        setTimeout(() => (t.className = "toast"), 2600);
+    }
+
+    function renderTable(cardId, list, kind) {
+        const card = document.getElementById(cardId);
+        if (!list.length) {
+            card.innerHTML = '<div class="empty">No messages.</div>';
+            return;
+        }
+        const isDead = kind === "deadLetter";
+        const rows = list.map((m, i) => `
+        <tr onclick="openModal('${kind}', ${i})">
+          <td title="${esc(m.messageId)}">${esc(m.messageId)}</td>
+          <td>${esc(m.subject) || "&mdash;"}</td>
+          <td>${esc(fmtDate(m.enqueuedTime))}</td>
+          <td>${esc(m.deliveryCount)}</td>
+          ${isDead ? `<td>${esc(m.deadLetterReason) || "&mdash;"}</td>` : ""}
+          <td class="actions">
+            ${isDead ? `<button class="act resubmit" onclick="event.stopPropagation();resubmit(${m.sequenceNumber})">Resubmit</button>` : ""}
+            <button class="act delete" onclick="event.stopPropagation();del('${kind}', ${m.sequenceNumber})">Delete</button>
+          </td>
+        </tr>`).join("");
+        card.innerHTML = `
+        <table>
+          <thead><tr>
+            <th>Message ID</th><th>Subject</th><th>Enqueued</th><th>Deliveries</th>
+            ${isDead ? "<th>Dead-letter reason</th>" : ""}
+            <th></th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    }
+
+    function openModal(kind, i) {
+        const m = current[kind][i];
+        if (!m) return;
+        const meta = [
+            ["Message ID", m.messageId],
+            ["Subject", m.subject || "—"],
+            ["Sequence #", m.sequenceNumber],
+            ["Enqueued", fmtDate(m.enqueuedTime)],
+            ["Delivery count", m.deliveryCount],
+            ["Content type", m.contentType || "—"],
+        ];
+        if (kind === "deadLetter") meta.push(["Dead-letter reason", m.deadLetterReason || "—"]);
+        document.getElementById("modalMeta").innerHTML =
+            meta.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("");
+        let body = m.body;
+        try {
+            body = JSON.stringify(JSON.parse(m.body), null, 2);
+        } catch {
+        }
+        document.getElementById("modalBody").textContent = body;
+
+        const foot = document.getElementById("modalFoot");
+        foot.innerHTML =
+            (kind === "deadLetter"
+                ? `<button class="act resubmit" onclick="closeModal();resubmit(${m.sequenceNumber})">Resubmit</button>`
+                : "") +
+            `<button class="act delete" onclick="closeModal();del('${kind}', ${m.sequenceNumber})">Delete</button>`;
+
+        document.getElementById("overlay").classList.add("open");
+    }
+
+    function closeModal() {
+        document.getElementById("overlay").classList.remove("open");
+    }
+
+    document.addEventListener("keydown", e => {
+        if (e.key === "Escape") {
+            closeModal();
+            closeSettings();
+        }
+    });
+
+    async function action(url, method, okMsg) {
+        if (busy) return;
+        if (!hasSettings()) {
+            openSettings();
+            return;
+        }
+        busy = true;
+        try {
+            const res = await fetch(url, {method, headers: sbHeaders()});
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.detail || err.message || "Request failed.");
+            }
+            toast(okMsg);
+            await load();
+        } catch (e) {
+            toast(e.message, true);
+        } finally {
+            busy = false;
+        }
+    }
+
+    function resubmit(seq) {
+        if (!confirm("Resubmit this message back onto the active queue and remove it from the dead-letter queue?")) return;
+        action(`/api/deadletter/${seq}/resubmit`, "POST", "Message resubmitted.");
+    }
+
+    function del(kind, seq) {
+        if (!confirm("Permanently delete this message? This cannot be undone.")) return;
+        const path = kind === "deadLetter" ? "deadletter" : "active";
+        action(`/api/${path}/${seq}`, "DELETE", "Message deleted.");
+    }
+
+    function delAll(kind) {
+        const label = kind === "deadLetter" ? "dead-letter" : "active";
+        if (!confirm(`Permanently delete ALL ${label} messages? This cannot be undone.`)) return;
+        const path = kind === "deadLetter" ? "deadletter" : "active";
+        action(`/api/${path}`, "DELETE", `All ${label} messages deleted.`);
+    }
+
+    async function load() {
+        updateQueueLabel();
+        if (!hasSettings()) {
+            document.getElementById("activeCard").innerHTML =
+                '<div class="empty">Not connected. Click “Connection” to enter your Service Bus details.</div>';
+            document.getElementById("deadCard").innerHTML = "";
+            openSettings();
+            return;
+        }
+        const btn = document.getElementById("refreshBtn");
+        btn.disabled = true;
+        btn.textContent = "Loading…";
+        try {
+            const res = await fetch("/api/messages", {headers: sbHeaders()});
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                throw new Error(err.detail || "Failed to load messages.");
+            }
+            current = await res.json();
+            const counts = current.counts || {
+                active: current.active.length,
+                deadLetter: current.deadLetter.length
+            };
+            document.getElementById("activeCount").textContent = counts.active;
+            document.getElementById("deadCount").textContent = counts.deadLetter;
+            document.getElementById("activeTotal").textContent = counts.active;
+            document.getElementById("deadTotal").textContent = counts.deadLetter;
+            renderTable("activeCard", current.active, "active");
+            renderTable("deadCard", current.deadLetter, "deadLetter");
+        } catch (e) {
+            const html = `<div class="error">${esc(e.message)}</div>`;
+            document.getElementById("activeCard").innerHTML = html;
+            document.getElementById("deadCard").innerHTML = "";
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "Refresh";
+        }
+    }
+
+    function toggleAuto() {
+        const on = document.getElementById("autoToggle").checked;
+        const interval = parseInt(document.getElementById("intervalSelect").value, 10) || 5000;
+        if (autoTimer) {
+            clearInterval(autoTimer);
+            autoTimer = null;
+        }
+        if (on) autoTimer = setInterval(() => {
+            if (!busy) load();
+        }, interval);
+    }
+
+    load();
+</script>
+</body>
+</html>

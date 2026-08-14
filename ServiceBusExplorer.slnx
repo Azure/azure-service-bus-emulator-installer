@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/Docker-Compose-Template/">
+    <File Path="Docker-Compose-Template/docker-compose-default.yml" />
+    <File Path="Docker-Compose-Template/docker-compose-standalone-emulator.yml" />
+    <File Path="Docker-Compose-Template/docker-compose-with-containerized-app.yml" />
+  </Folder>
+  <Folder Name="/ServiceBus-Emulator/" />
+  <Folder Name="/ServiceBus-Emulator/Config/" />
+  <Folder Name="/ServiceBus-Emulator/Config/Prover/">
+    <File Path="ServiceBus-Emulator/Config/Prover/Config.json" />
+  </Folder>
+  <Folder Name="/ServiceBus-Emulator/Scripts/" />
+  <Folder Name="/ServiceBus-Emulator/Scripts/Mac/">
+    <File Path="ServiceBus-Emulator/Scripts/Mac/LaunchEmulator.sh" />
+  </Folder>
+  <Folder Name="/ServiceBus-Emulator/Scripts/Windows/">
+    <File Path="ServiceBus-Emulator/Scripts/Windows/LaunchEmulator.ps1" />
+  </Folder>
+  <Folder Name="/Source/">
+    <Project Path="ServiceBusExplorer.Spa/ServiceBusExplorer.Spa.csproj" />
+  </Folder>
+</Solution>
