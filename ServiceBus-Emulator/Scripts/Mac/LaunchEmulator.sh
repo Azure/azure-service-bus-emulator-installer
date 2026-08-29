@@ -13,6 +13,8 @@ CONFIG_PATH='../ServiceBus-Emulator/Config/Config.json'
 COMPOSE_DOWN='n'
 composeFile=$(realpath "$(dirname "$BASH_SOURCE")/../../../Docker-Compose-Template/docker-compose-default.yml")
 SQL_PASSWORD=''
+EMULATOR_AMQP_PORT=''
+EMULATOR_HTTP_PORT=''
 
 # Password regex pattern
 char_allowed='^.{8,128}$'
@@ -83,6 +85,14 @@ do
         fi
     fi
 
+    if [[ $arg == --EMULATOR_AMQP_PORT=* ]]; then
+        EMULATOR_AMQP_PORT="${arg#*=}"
+    fi
+
+    if [[ $arg == --EMULATOR_HTTP_PORT=* ]]; then
+        EMULATOR_HTTP_PORT="${arg#*=}"
+    fi
+
 done
 
 # Skip EULA check if only running docker compose down
@@ -122,6 +132,8 @@ fi
 
 # Set Config Path as env variable
 export CONFIG_PATH=$CONFIG_PATH
+if [[ -n "$EMULATOR_AMQP_PORT" ]]; then export EMULATOR_AMQP_PORT=$EMULATOR_AMQP_PORT; fi
+if [[ -n "$EMULATOR_HTTP_PORT" ]]; then export EMULATOR_HTTP_PORT=$EMULATOR_HTTP_PORT; fi
 
 # Run docker compose down
 docker compose -f $composeFile down

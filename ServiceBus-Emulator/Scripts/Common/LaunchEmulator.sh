@@ -7,6 +7,7 @@ COMPOSE_DOWN='n'
 composeFile=$(realpath "$(dirname "$BASH_SOURCE")/../../../Docker-Compose-Template/docker-compose-default.yml")
 SQL_PASSWORD=''
 SQL_WAIT_INTERVAL=''
+EMULATOR_AMQP_PORT=''
 
 # Password regex pattern
 char_allowed='^.{8,128}$'
@@ -77,6 +78,14 @@ do
         fi
     fi
 
+    if [[ $arg == --EMULATOR_AMQP_PORT=* ]]; then
+        EMULATOR_AMQP_PORT="${arg#*=}"
+    fi
+
+    if [[ $arg == --EMULATOR_HTTP_PORT=* ]]; then
+        EMULATOR_HTTP_PORT="${arg#*=}"
+    fi
+
 done
 
 # Skip EULA check if only running docker compose down
@@ -114,6 +123,12 @@ if [[ "$COMPOSE_DOWN" != 'y' && "$COMPOSE_DOWN" != 'Y' ]]; then
         SQL_WAIT_INTERVAL=${SQL_WAIT_INTERVAL:-15}
     fi
 
+    if [ -z "$EMULATOR_AMQP_PORT" ]; then
+        read -p "Enter the emulator AMQP host port for message operations [default: 5672]: " EMULATOR_AMQP_PORT
+        # Set default value if no input is provided
+        EMULATOR_AMQP_PORT=${EMULATOR_AMQP_PORT:-5672}
+    fi
+
     if [ -z "$EMULATOR_HTTP_PORT" ]; then
         read -p "Enter the emulator HTTP port for health-check and Management APIs [default: 5300]: " EMULATOR_HTTP_PORT
         # Set default value if no input is provided
@@ -125,6 +140,7 @@ if [[ "$COMPOSE_DOWN" != 'y' && "$COMPOSE_DOWN" != 'Y' ]]; then
     export ACCEPT_EULA=$ACCEPT_EULA
     export SQL_PASSWORD=$SQL_PASSWORD
     export SQL_WAIT_INTERVAL=$SQL_WAIT_INTERVAL
+    export EMULATOR_AMQP_PORT=$EMULATOR_AMQP_PORT
     export EMULATOR_HTTP_PORT=$EMULATOR_HTTP_PORT
 fi
 
