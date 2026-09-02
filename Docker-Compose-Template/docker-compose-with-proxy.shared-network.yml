@@ -1,0 +1,18 @@
+# Compose override: switches the emulator stack to a shared external network
+# so containers from other Podman/Docker Compose projects can connect.
+#
+# Prerequisites:
+#   podman network create dev-local 2>/dev/null || true
+#
+# Usage:
+#   podman compose \
+#     -f docker-compose-with-proxy.yml \
+#     -f docker-compose-with-proxy.shared-network.yml \
+#     up -d
+#
+# Other services connect to the AMQP proxy at sb-proxy:5672 on the dev-local network.
+
+networks:
+  sb-emulator:
+    external: true
+    name: dev-local
