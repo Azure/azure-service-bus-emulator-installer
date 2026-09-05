@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "generateDebugSymbols",
+      "command": "${config:azureLogicAppsStandard.dotnetBinaryPath}",
+      "args": [
+        "${input:getDebugSymbolDll}"
+      ],
+      "type": "process",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "type": "shell",
+      "command": "${config:azureLogicAppsStandard.funcCoreToolsBinaryPath}",
+      "args": [
+        "host",
+        "start"
+      ],
+      "options": {
+        "env": {
+          "PATH": "${config:azureLogicAppsStandard.autoRuntimeDependenciesPath}\\NodeJs;${config:azureLogicAppsStandard.autoRuntimeDependenciesPath}\\DotNetSDK;$env:PATH"
+        }
+      },
+      "problemMatcher": "$func-watch",
+      "isBackground": true,
+      "label": "func: host start",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "getDebugSymbolDll",
+      "type": "command",
+      "command": "azureLogicAppsStandard.getDebugSymbolDll"
+    }
+  ]
+}
