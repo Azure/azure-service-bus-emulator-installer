@@ -5,12 +5,14 @@ on:
     paths:
       - ".github/workflows/validate-launcher.yml"
       - "ServiceBus-Emulator/Scripts/Common/**"
+      - "ServiceBus-Emulator/Scripts/Windows/**"
   push:
     branches:
       - main
     paths:
       - ".github/workflows/validate-launcher.yml"
       - "ServiceBus-Emulator/Scripts/Common/**"
+      - "ServiceBus-Emulator/Scripts/Windows/**"
 
 permissions:
   contents: read
@@ -25,3 +27,6 @@ jobs:
         run: bash -n ServiceBus-Emulator/Scripts/Common/LaunchEmulator.sh
       - name: Test launcher behavior
         run: python3 -m unittest discover -s ServiceBus-Emulator/Scripts/Common/tests -v
+      - name: Test PowerShell launcher password input
+        shell: pwsh
+        run: ServiceBus-Emulator/Scripts/Windows/tests/Test-LaunchEmulator.ps1
