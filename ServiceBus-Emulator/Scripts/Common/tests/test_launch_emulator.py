@@ -22,7 +22,7 @@ PORT_PROMPT = "Enter the emulator HTTP port for health-check and Management APIs
 
 class LaunchEmulatorTests(unittest.TestCase):
     def test_interactive_password_is_not_echoed(self):
-        test_credential = "ValidPassword1!"
+        test_credential = r"Valid\Password1!"
 
         with tempfile.TemporaryDirectory() as temp_dir:
             docker = Path(temp_dir) / "docker"
