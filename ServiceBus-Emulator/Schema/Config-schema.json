@@ -156,8 +156,8 @@
                     },
                     "Subscriptions": {
                       "type": "array",
-                      "description": "Subscription configuration is defined here",
-                      "minItems": 1,
+                      "description": "Optional subscription configuration for the topic. Messages sent while a topic has no subscriptions are not retained for a future subscription.",
+                      "minItems": 0,
                       "maxItems": 50,
                       "items": {
                         "type": "object",
@@ -326,8 +326,7 @@
                     }
                   },
                   "required": [
-                    "Name",
-                    "Subscriptions"
+                    "Name"
                   ]
                 }
               }
