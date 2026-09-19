@@ -97,7 +97,8 @@ if [[ "$COMPOSE_DOWN" != 'y' && "$COMPOSE_DOWN" != 'Y' ]]; then
 
     if [[ $result -eq 0 ]]; then
         echo 'Enter the password for the SQL Server (To be filled as per policy : https://learn.microsoft.com/en-us/sql/relational-databases/security/strong-passwords?view=sql-server-linux-ver16)'
-        read SQL_PASSWORD
+        IFS= read -rs SQL_PASSWORD
+        printf '\n'
 
         validate_password
         result=$?
