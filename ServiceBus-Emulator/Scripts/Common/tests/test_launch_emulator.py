@@ -22,11 +22,16 @@ PORT_PROMPT = "Enter the emulator HTTP port for health-check and Management APIs
 
 class LaunchEmulatorTests(unittest.TestCase):
     def test_interactive_password_is_not_echoed(self):
-        test_credential = r"Valid\Password1!"
+        test_credential = "  Valid\\Password1!  "
 
         with tempfile.TemporaryDirectory() as temp_dir:
             docker = Path(temp_dir) / "docker"
-            docker.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+            captured_password = Path(temp_dir) / "captured-password"
+            docker.write_text(
+                '#!/bin/sh\nprintf "%s" "$SQL_PASSWORD" > '
+                f'"{captured_password}"\nexit 0\n',
+                encoding="utf-8",
+            )
             docker.chmod(docker.stat().st_mode | stat.S_IXUSR)
 
             master, slave = os.openpty()
@@ -61,6 +66,10 @@ class LaunchEmulatorTests(unittest.TestCase):
             output = transcript.decode(errors="replace")
             self.assertEqual(0, process.returncode, output)
             self.assertNotIn(test_credential, output)
+            self.assertEqual(
+                test_credential,
+                captured_password.read_text(encoding="utf-8"),
+            )
             self.assertIn(
                 f"{PASSWORD_PROMPT}\r\n\r\n{WAIT_PROMPT}",
                 output,
