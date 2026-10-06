@@ -1,0 +1,36 @@
+name: Validate shell scripts
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse shell scripts
+        shell: bash
+        run: |
+          while IFS= read -r -d '' script; do
+            bash -n "$script"
+          done < <(git ls-files -z '*.sh')
+
+      - name: Verify Windows checkouts preserve LF
+        shell: bash
+        run: |
+          checkout="$(mktemp -d)"
+          git -c core.autocrlf=true clone --quiet --no-local . "$checkout"
+
+          while IFS= read -r -d '' script; do
+            if grep -q $'\r$' "$checkout/$script"; then
+              echo "::error file=$script::Shell script contains CRLF line endings"
+              exit 1
+            fi
+          done < <(git ls-files -z '*.sh')
