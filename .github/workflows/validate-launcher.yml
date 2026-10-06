@@ -1,0 +1,32 @@
+name: Validate launcher
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/validate-launcher.yml"
+      - "ServiceBus-Emulator/Scripts/Common/**"
+      - "ServiceBus-Emulator/Scripts/Windows/**"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/validate-launcher.yml"
+      - "ServiceBus-Emulator/Scripts/Common/**"
+      - "ServiceBus-Emulator/Scripts/Windows/**"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Check launcher syntax
+        run: bash -n ServiceBus-Emulator/Scripts/Common/LaunchEmulator.sh
+      - name: Test launcher behavior
+        run: python3 -m unittest discover -s ServiceBus-Emulator/Scripts/Common/tests -v
+      - name: Test PowerShell launcher password input
+        shell: pwsh
+        run: ServiceBus-Emulator/Scripts/Windows/tests/Test-LaunchEmulator.ps1

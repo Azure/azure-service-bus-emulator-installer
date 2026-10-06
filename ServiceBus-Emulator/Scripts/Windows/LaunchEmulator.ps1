@@ -70,7 +70,13 @@ if($PSBoundParameters.ContainsKey('SQL_PASSWORD')){
     }
 }
 else{
-    $SQL_PASSWORD = Read-Host "Enter the password for the SQL Server (To be filled as per policy : https://learn.microsoft.com/en-us/sql/relational-databases/security/strong-passwords?view=sql-server-linux-ver16)"
+    $securePassword = Read-Host "Enter the password for the SQL Server (To be filled as per policy : https://learn.microsoft.com/en-us/sql/relational-databases/security/strong-passwords?view=sql-server-linux-ver16)" -AsSecureString
+    try {
+        $SQL_PASSWORD = [System.Net.NetworkCredential]::new('', $securePassword).Password
+    }
+    finally {
+        $securePassword.Dispose()
+    }
 
     $isValid = Validate-Password -password $SQL_PASSWORD
 
