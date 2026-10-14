@@ -163,6 +163,19 @@ The Service Bus emulator uses a static connection string, but the host value var
 > For management operations & health-check, the emulator uses port 5300 by default.<br>
 > You can configure the emulator to use a different port if required using the `EMULATOR_HTTP_PORT` environment variable.
 
+### AMQP over WebSockets
+
+The emulator exposes AMQP over WebSockets for clients that cannot open a native
+AMQP TCP connection. Connect to:
+
+```text
+ws://localhost:5673/$servicebus/websocket
+```
+
+The WebSocket subprotocol is `AMQPWSB10`. Port 5673 is published by the Docker
+Compose templates and can be changed with the `SERVICEBUS_WEBSOCKET_PORT`
+environment variable.
+
 
 ## Code Samples
 

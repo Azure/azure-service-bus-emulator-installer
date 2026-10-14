@@ -11,9 +11,11 @@ services:
       - "${CONFIG_PATH:-../ServiceBus-Emulator/Config/Config.json}:/ServiceBus_Emulator/ConfigFiles/Config.json"
     ports:
       - "5672:5672"
+      - "${SERVICEBUS_WEBSOCKET_PORT:-5673}:${SERVICEBUS_WEBSOCKET_PORT:-5673}"
       - "5300:${EMULATOR_HTTP_PORT:-5300}"
     environment:
       SQL_SERVER: host.docker.internal:1433 # Host:Port for user speficied SQL DB container (Port is optional if default 1433 is used)
       MSSQL_SA_PASSWORD: "${SQL_PASSWORD}"  # Password for user specified SQL instance  
       ACCEPT_EULA: ${ACCEPT_EULA}
       EMULATOR_HTTP_PORT: ${EMULATOR_HTTP_PORT:-5300}  # Port on which emulator will expose Management & Health-check APIs
+      SERVICEBUS_WEBSOCKET_PORT: ${SERVICEBUS_WEBSOCKET_PORT:-5673} # Port on which emulator will expose AMQP over WebSockets
