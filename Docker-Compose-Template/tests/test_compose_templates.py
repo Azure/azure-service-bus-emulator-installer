@@ -35,6 +35,7 @@ class ComposeTemplateTests(unittest.TestCase):
                 "ACCEPT_EULA": "Y",
                 "SQL_PASSWORD": "ComposeTestPassword1!",
                 "SQL_WAIT_INTERVAL": "1",
+                "SERVICEBUS_WEBSOCKET_PORT": "",
                 **overrides,
             }
         )
