@@ -8,6 +8,7 @@ services:
       - "${CONFIG_PATH:-../ServiceBus-Emulator/Config/Config.json}:/ServiceBus_Emulator/ConfigFiles/Config.json"
     ports:
       - "5672:5672"
+      - "${SERVICEBUS_WEBSOCKET_PORT:-5673}:${SERVICEBUS_WEBSOCKET_PORT:-5673}"
       - "5300:${EMULATOR_HTTP_PORT:-5300}"
     environment:
       SQL_SERVER: sqledge
@@ -15,6 +16,8 @@ services:
       ACCEPT_EULA: ${ACCEPT_EULA}
       SQL_WAIT_INTERVAL: ${SQL_WAIT_INTERVAL} # Optional: Time in seconds to wait for SQL to be ready (default is 15 seconds)
       EMULATOR_HTTP_PORT: ${EMULATOR_HTTP_PORT:-5300} # Port on which emulator will expose Management & Health-check APIs
+      SERVICEBUS_WEBSOCKET_PORT: ${SERVICEBUS_WEBSOCKET_PORT:-5673} # Port on which emulator will expose AMQP over WebSockets
+      SERVICEBUS_ALLOWED_ORIGINS: ${SERVICEBUS_ALLOWED_ORIGINS:-} # Additional trusted browser origins, separated by semicolons
     depends_on:
       - sqledge
     networks:
@@ -34,4 +37,3 @@ services:
 
 networks:
   sb-emulator:
-
