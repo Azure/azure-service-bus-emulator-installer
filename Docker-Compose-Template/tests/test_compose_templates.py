@@ -14,6 +14,25 @@ COMPOSE_FILES = (
 
 
 class ComposeTemplateTests(unittest.TestCase):
+    def test_browser_origins_default_to_loopback_only(self):
+        for compose_file in COMPOSE_FILES:
+            with self.subTest(compose_file=compose_file):
+                emulator = self._render_emulator(compose_file)
+                self.assertEqual(
+                    "", emulator["environment"]["SERVICEBUS_ALLOWED_ORIGINS"]
+                )
+
+    def test_additional_browser_origins_are_forwarded(self):
+        origins = "https://explorer.example;http://192.0.2.10:3000"
+        for compose_file in COMPOSE_FILES:
+            with self.subTest(compose_file=compose_file):
+                emulator = self._render_emulator(
+                    compose_file, SERVICEBUS_ALLOWED_ORIGINS=origins
+                )
+                self.assertEqual(
+                    origins, emulator["environment"]["SERVICEBUS_ALLOWED_ORIGINS"]
+                )
+
     def test_websocket_port_defaults_to_5673(self):
         for compose_file in COMPOSE_FILES:
             with self.subTest(compose_file=compose_file):
@@ -36,6 +55,7 @@ class ComposeTemplateTests(unittest.TestCase):
                 "SQL_PASSWORD": "ComposeTestPassword1!",
                 "SQL_WAIT_INTERVAL": "1",
                 "SERVICEBUS_WEBSOCKET_PORT": "",
+                "SERVICEBUS_ALLOWED_ORIGINS": "",
                 **overrides,
             }
         )

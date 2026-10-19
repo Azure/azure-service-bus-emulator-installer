@@ -176,6 +176,41 @@ The WebSocket subprotocol is `AMQPWSB10`. Port 5673 is published by the Docker
 Compose templates and can be changed with the `SERVICEBUS_WEBSOCKET_PORT`
 environment variable.
 
+### Browser access
+
+By default, the emulator accepts browser origins hosted on `localhost` or a
+loopback IP address, on any HTTP or HTTPS port. Other browser origins are
+rejected by the WebSocket endpoint and do not receive management API CORS
+headers.
+
+To trust an additional browser application, set `SERVICEBUS_ALLOWED_ORIGINS`
+before starting the Compose stack:
+
+```text
+SERVICEBUS_ALLOWED_ORIGINS=https://explorer.example;http://192.0.2.10:3000
+```
+
+Use a semicolon-separated list of origins, each with a scheme, host, and
+optional port. Paths, wildcard origins (`*`), and opaque origins (`null`) are
+not allowed. Invalid configuration stops startup rather than broadening access.
+Loopback origins remain allowed when additional origins are configured.
+
+The same list controls WebSocket connections and management API CORS on port
+5300 (or the configured `EMULATOR_HTTP_PORT`). Management CORS handles
+preflight requests, permits the `Authorization` header, and exposes `ETag` and
+`Location` response headers. Browser cookies and credentialed CORS are not
+enabled. Clients must still authenticate their Service Bus operations.
+
+Only add origins you trust to access your development emulator. A browser
+application can read and modify emulator entities and messages from an allowed
+origin. Browser mixed-content and local-network access restrictions still
+apply; the origin allow-list does not bypass those browser checks.
+
+> [!IMPORTANT]
+> Browser origin configuration requires a compatible emulator image containing
+> the shared WebSocket and management CORS policy. The installer change remains
+> in draft until that image is available.
+
 
 ## Code Samples
 

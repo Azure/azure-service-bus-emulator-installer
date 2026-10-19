@@ -17,6 +17,7 @@ services:
       SQL_WAIT_INTERVAL: ${SQL_WAIT_INTERVAL} # Optional: Time in seconds to wait for SQL to be ready (default is 15 seconds)
       EMULATOR_HTTP_PORT: ${EMULATOR_HTTP_PORT:-5300} # Port on which emulator will expose Management & Health-check APIs
       SERVICEBUS_WEBSOCKET_PORT: ${SERVICEBUS_WEBSOCKET_PORT:-5673} # Port on which emulator will expose AMQP over WebSockets
+      SERVICEBUS_ALLOWED_ORIGINS: ${SERVICEBUS_ALLOWED_ORIGINS:-} # Additional trusted browser origins, separated by semicolons
     depends_on:
       - sqledge
     networks:
