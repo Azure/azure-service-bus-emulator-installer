@@ -46,25 +46,6 @@ async function main() {
     // 1. Initialize the Administration Client
     const adminClient = new ServiceBusAdministrationClient(adminApiConnectionString);
 
-    // Temporary hacks until SDK supports non-TLS and custom-port from connection-string for management operations
-    const internalClient = adminClient["_httpClient"]; 
-    const originalSendRequest = internalClient.sendRequest.bind(internalClient);
-    internalClient.sendRequest = async function (request) {
-        request.allowInsecureConnection = true; // Bypass TLS for emulator
-        return originalSendRequest(request);
-    };
-    adminClient.getUrl = function (path, queryParams) {
-        const baseUri = `http://${EMULATOR_HOST}:${EMULATOR_HTTP_PORT}/${path}`; // Override to custom admin-api port
-        const requestUrl = new URL(baseUri);
-        requestUrl.searchParams.set("api-version", this.serviceVersion || "2021-05");
-        if (queryParams) {
-            for (const [key, value] of Object.entries(queryParams)) {
-                requestUrl.searchParams.set(key, value);
-            }
-        }
-        return requestUrl.toString();
-    };
-
     try {
         // Step 1: Create Queue
         console.log(`[Admin] Creating queue: ${queueName}...`);
