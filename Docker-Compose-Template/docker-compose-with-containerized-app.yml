@@ -2,7 +2,7 @@ name: microsoft-azure-servicebus-emulator
 services:
   emulator:
     container_name: "servicebus-emulator"
-    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
+    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest@sha256:5a96d893b245031740f7d46e0fe5ff282d24b78c4b7d761dd57590f3f010a9b3
     pull_policy: always
     volumes:
       - "${CONFIG_PATH:-../ServiceBus-Emulator/Config/Config.json}:/ServiceBus_Emulator/ConfigFiles/Config.json"
@@ -24,7 +24,7 @@ services:
           - "sb-emulator"
   sqledge:
     container_name: "sqledge"
-    image: "mcr.microsoft.com/azure-sql-edge:latest"
+    image: "mcr.microsoft.com/azure-sql-edge:latest@sha256:902628a8be89e35dfb7895ca31d602974c7bafde4d583a0d0873844feb1c42cf"
     networks:
       sb-emulator:
         aliases:
@@ -39,7 +39,7 @@ services:
       retries: 10
   dotnet-sample-client-app:
     container_name: "dotnet-sample-emulator-client"
-    image: mcr.microsoft.com/dotnet/sdk:8.0
+    image: mcr.microsoft.com/dotnet/sdk:8.0@sha256:1b955f179b02df4f0eb5fadedaa898cbe44d620a64aab52eec72c8e91d1355b5
     working_dir: /src
     volumes:
       - ../Sample-Code-Snippets/NET/ServiceBus.Emulator.Console.Sample/ServiceBus.Emulator.Console.Sample:/src
@@ -59,7 +59,7 @@ services:
           - "dotnet-sample-client-app"
   python-sample-client-app:
     container_name: "python-sample-emulator-client"
-    image: python:3.11-slim
+    image: python:3.11-slim@sha256:07d4824036af339fa1b6ef769cc99d9c10a141769538b52b3b597c84f7a7b535
     working_dir: /src
     volumes:
       - ../Sample-Code-Snippets/Python/azure-service-bus-emulator-console-sample:/src
@@ -80,7 +80,7 @@ services:
           - "python-sample-client-app"
   js-sample-client-app:
     container_name: "js-sample-emulator-client"
-    image: node:20-bookworm
+    image: node:20-bookworm@sha256:8f693eaa7e0a8e71560c9a82b55fd54c2ae920a2ba5d2cde28bac7d1c01c9ba5
     working_dir: /src
     volumes:
       - ../Sample-Code-Snippets/JS/azure-service-bus-emulator-node-sample:/src
@@ -91,7 +91,7 @@ services:
       - "bash"
       - "-c"
       - >
-        npm install --no-package-lock --production
+        npm ci --omit=dev
         && node sample-send-receive.js
     depends_on:
       emulator:
@@ -102,7 +102,7 @@ services:
           - "js-sample-client-app"
   go-sample-client-app:
     container_name: "go-sample-emulator-client"
-    image: golang:1.23-bookworm
+    image: golang:1.23-bookworm@sha256:167053a2bb901972bf2c1611f8f52c44d5fe7e762e5cab213708d82c421614db
     working_dir: /src
     volumes:
       - ../Sample-Code-Snippets/Go/azure-service-bus-emulator-console-sample:/src
@@ -124,7 +124,7 @@ services:
           - "go-sample-client-app"
   java-sample-client-app:
     container_name: "java-sample-emulator-client"
-    image: maven:3.9.9-eclipse-temurin-21
+    image: maven:3.9.9-eclipse-temurin-21@sha256:3a4ab3276a087bf276f79cae96b1af04f53731bec53fb2e651aca79e4b10211e
     working_dir: /src
     volumes:
       - ../Sample-Code-Snippets/Java/azure-service-bus-emulator-console-sample:/src

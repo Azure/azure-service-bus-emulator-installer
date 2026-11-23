@@ -116,6 +116,8 @@ LaunchEmulator.sh --compose-down=Y
 
 You can also spin up Emulator using Docker Compose file directly. Refer [here](https://learn.microsoft.com/en-us/azure/service-bus-messaging/test-locally-with-service-bus-emulator#tabs=docker-linux-container) for details:
 
+The Compose templates pin container images to immutable manifest digests. When updating an image, verify its replacement digest in the upstream registry and use the manifest-list/index digest to preserve supported platforms. The JavaScript sample container uses `npm ci --omit=dev` to install dependencies from the committed lockfile.
+
 
 
 

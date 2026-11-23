@@ -2,7 +2,7 @@ name: microsoft-azure-servicebus-emulator
 services:
   emulator:
     container_name: "servicebus-emulator"
-    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
+    image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest@sha256:5a96d893b245031740f7d46e0fe5ff282d24b78c4b7d761dd57590f3f010a9b3
     pull_policy: always
     volumes:
       - "${CONFIG_PATH:-../ServiceBus-Emulator/Config/Config.json}:/ServiceBus_Emulator/ConfigFiles/Config.json"
@@ -23,7 +23,7 @@ services:
           - "sb-emulator"
   sqledge:
     container_name: "sqledge"
-    image: "mcr.microsoft.com/azure-sql-edge:latest"
+    image: "mcr.microsoft.com/azure-sql-edge:latest@sha256:902628a8be89e35dfb7895ca31d602974c7bafde4d583a0d0873844feb1c42cf"
     networks:
       sb-emulator:
         aliases:
