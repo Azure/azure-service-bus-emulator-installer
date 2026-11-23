@@ -80,7 +80,7 @@ services:
           - "python-sample-client-app"
   js-sample-client-app:
     container_name: "js-sample-emulator-client"
-    image: node:20-bookworm
+    image: node:22-bookworm
     working_dir: /src
     volumes:
       - ../Sample-Code-Snippets/JS/azure-service-bus-emulator-node-sample:/src

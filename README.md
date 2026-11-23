@@ -168,10 +168,12 @@ The Service Bus emulator uses a static connection string, but the host value var
 
 - .Net - SDK Version "Azure.Messaging.ServiceBus v7.20.1" supports emulator management APIs natively.
     - [.Net Code sample](/Sample-Code-Snippets/NET/ServiceBus.Emulator.Console.Sample/ServiceBus.Emulator.Console.Sample/Program.cs)
-- SDKs in other languages do not honor non‑TLS connections or custom ports in the connection string. As a result, they do not natively support the Emulator’s management APIs. Limited workarounds are available to configure these SDKs to communicate with the Emulator over non‑TLS and custom ports. Refer to the code samples for details.
+- JavaScript - `@azure/service-bus` version 7.10.0 requires Node.js 22 or later and supports HTTP and an explicit management port natively with `UseDevelopmentEmulator=true`.
+    - [JavaScript Code sample](/Sample-Code-Snippets/JS/azure-service-bus-emulator-node-sample/sample-send-receive.js)
+    - Use the emulator flag only for emulator connections. Omit it when connecting to Azure; setting it to `false` does not restore HTTPS administration in version 7.10.0.
+- The Go, Java, and Python samples use workarounds for non-TLS management connections and custom ports. Refer to the code samples for details.
     - [Go Code sample](/Sample-Code-Snippets/Go/azure-service-bus-emulator-console-sample/main.go)
     - [Java Code sample](/Sample-Code-Snippets/Java/azure-service-bus-emulator-console-sample/src/main/java/com/contoso/org/Main.java)
-    - [JavaScript Code sample](/Sample-Code-Snippets/JS/azure-service-bus-emulator-node-sample/sample-send-receive.js)
     - [Python Code sample](/Sample-Code-Snippets/Python/azure-service-bus-emulator-console-sample/sample-send-receive.py)
 
 ## Support
